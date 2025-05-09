@@ -25,8 +25,8 @@ use Illuminate\Database\Eloquent\Model;
 class Resultat extends Model
 {
 	protected $table = 'resultat';
-	public $incrementing = false;
-	public $timestamps = false;
+	// public $incrementing = false;
+	public $timestamps = true;
 
 	protected $casts = [
 		'rubrique_id' => 'int',

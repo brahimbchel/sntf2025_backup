@@ -16,11 +16,19 @@ class OrdonnanceRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('consultation_id')
-                    ->numeric(),
-                Forms\Components\DatePicker::make('date_ordonnance'),
+                // Forms\Components\TextInput::make('consultation_id')
+                //     ->numeric(),
+                // Forms\Components\DatePicker::make('date_ordonnance'),
+                // Forms\Components\Textarea::make('recommandations')
+                //     ->columnSpanFull(),
+                    
+                Forms\Components\DatePicker::make('date_ordonnance')
+                    ->label('Date de l\'ordonnance')
+                    ->required(),
+                
                 Forms\Components\Textarea::make('recommandations')
-                    ->columnSpanFull(),
+                    ->label('Recommandations')
+                    ->placeholder('Entrer les recommandations ici...')
             ]);
     }
 
