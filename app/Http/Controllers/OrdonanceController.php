@@ -2,11 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employe;
 use App\Models\Ordonnance;
 use Illuminate\Http\Request;
 
 class OrdonanceController extends Controller
 {
+    // return ordonnances for an employee, including their medicaments 
+    public function getOrdonnancesWithMedicaments($employeId)
+    {
+        $employe = Employe::find($employeId);
+
+        $consultations = $employe->dossier_medicals->pluck('consultations')->flatten();
+
+        if (!$employe || !$employe->dossier_medicals) {
+            return response()->json(['message' => 'Employé ou dossier médical non trouvé'], 404);
+        }
+
+        $ordonnances = collect();
+        $ordonnances = $ordonnances->sortByDesc('date')->values();
+
+
+        foreach ($consultations as $consultation) {
+            foreach ($consultation->ordonnances as $ordonnance) {
+                $ordonnances->push([
+                    'ordonnance_id' => $ordonnance->id,
+                    'date' => $ordonnance->created_at,
+                    'medicaments' => $ordonnance->medicaments->map(function($med) {
+                        return [
+                            'id' => $med->id,
+                            'nom' => $med->nom,
+                            'dosage' => $med->pivot->dosage ?? null, // only if you have dosage in pivot
+                        ];
+                    }),
+                ]);
+            }
+        }
+
+        return response()->json([
+            'employe_id' => $employe->id,
+            'ordonnances' => $ordonnances
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */

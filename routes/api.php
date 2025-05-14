@@ -3,6 +3,7 @@
 use App\Http\Controllers\CentreMedicalController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DossierMedicalController;
+use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\ExplorationFonctionnelleController;
 use App\Http\Controllers\MedecinController;
 use App\Http\Controllers\MedicamentController;
@@ -49,6 +50,8 @@ Route::get('/consultations/future/{dossierId}', [ConsultationController::class, 
 
 Route::apiResource('exploration-fonctionelle', ExplorationFonctionnelleController::class);
 
-Route::apiResource('ordonnances', OrdonanceController::class);
-
 Route::apiResource('medicaments', MedicamentController::class);
+
+Route::apiResource('ordonnances', OrdonanceController::class);
+Route::get('employes/{id}/ordonnances', [OrdonanceController::class, 'getOrdonnancesWithMedicaments']);
+ // getOrdonnancesWithMedicaments
