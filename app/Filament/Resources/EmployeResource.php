@@ -13,6 +13,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Support\Enums\ActionSize;
+
 
 class EmployeResource extends Resource
 {
@@ -24,95 +28,139 @@ class EmployeResource extends Resource
     {
         return $form
             ->schema([
+
                 Forms\Components\TextInput::make('nom')
                     ->required()
+                    ->label('Nom')
                     ->maxLength(100),
                 Forms\Components\TextInput::make('prenom')
                     ->required()
+                    ->label('Prénom')
                     ->maxLength(100),
+                Forms\Components\TextInput::make('matricule')
+                    ->required()
+                    ->label('Matricule')
+                    ->maxLength(100),
+
                 Forms\Components\TextInput::make('fonction')
                     ->maxLength(100),
              
-                             Select::make('departement_id')->label('departement')->relationship('Departement', 'nom')->searchable(),
+                Select::make('departement_id')->label('departement')->preload()->relationship('Departement', 'nom')->searchable(),
             
-                Forms\Components\DatePicker::make('datedenaissance'),
-                Forms\Components\Toggle::make('gender'),
+                Forms\Components\DatePicker::make('datedenaissance')
+                    ->label('Date de naissance')
+                    ->native(false)
+                    ->displayFormat('d/m/Y'),
+                
+                Select::make('gender')
+                    ->options([
+                        'Homme' => 'Homme',
+                        'Femme' => 'Femme',
+                    ])
+                    ->required(),
+
                 Forms\Components\TextInput::make('adresse')
                     ->maxLength(100),
                 Forms\Components\TextInput::make('tel')
-                    ->tel()
-                    ->maxLength(50),
+                    ->label('Numéro de téléphone')
+                    ->required()
+                    ->telRegex('/^(05|06|07)[0-9]{8}$/')
+                    ->tel(),
                 Forms\Components\TextInput::make('email')
                     ->email()
+                    ->required()
+                    ->label('E-mail')
                     ->maxLength(50),
-                Forms\Components\Toggle::make('etat'),
+
+                Select::make('groupe_sanguin')
+                    ->label('Groupe sanguin')
+                    ->options([
+                        'A+' => 'A+',
+                        'A-' => 'A-',
+                        'B+' => 'B+',
+                        'B-' => 'B-',
+                        'AB+' => 'AB+',
+                        'AB-' => 'AB-',
+                        'O+' => 'O+',
+                        'O-' => 'O-',
+                    ]),
+
+                Select::make('situation_familiale')
+                    ->label('Situation familiale')
+                    ->options([
+                        'célibataire' => 'Célibataire',
+                        'marié(e)' => 'Marié(e)',
+                        'divorcé(e)' => 'Divorcé(e)',
+                        'veuf(ve)' => 'Veuf(ve)',
+                    ]),      
+
+                Select::make('service_national')
+                    ->label('Service national')
+                    ->options([
+                        'accompli' => 'Accompli',
+                        'dispensé' => 'Dispensé',
+                        'inapte' => 'Inapte',
+                    ]),
+
+                Select::make('etat')
+                    ->options([
+                        'Actif' => 'Actif',
+                        'Inactif' => 'Inactif',
+                    ])
+                    ->default('draft')
             ]);
+
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+
+                Tables\Columns\TextColumn::make('matricule')
+                    ->searchable()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('nom')
                     ->searchable()
-                     ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('prenom')
                     ->searchable()
-                     ->sortable()
-                    ->toggleable(),
+                    ->sortable(),
 
-                Tables\Columns\TextColumn::make('fonction')
-                    ->searchable()
-                     ->sortable()
-                    ->toggleable(),
+                BadgeColumn::make('gender')
+                ->label('sex')
+                ->sortable()
+                ->colors([
+                    'info' => 'Homme',
+                    'pink' => 'Femme',
+                ]),
 
-              Tables\Columns\TextColumn::make('departement.nom')->label('Dept'),
-
-                Tables\Columns\TextColumn::make('datedenaissance')
-                    ->date()
-                     ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\IconColumn::make('gender')
-                    ->boolean() 
-                    ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('adresse')
-                    ->searchable()
-                     ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('tel')
-                    ->searchable()
-                     ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable()
-                     ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\IconColumn::make('etat')
-                    ->boolean()
-                     ->sortable()
-                    ->toggleable(),
-
+                Tables\Columns\TextColumn::make('departement.nom')->label('Departement'),
+                
+                BadgeColumn::make('etat')
+                ->sortable()
+                
+                ->colors([
+                    'success' => 'Actif',
+                    'danger' => 'Inactif',
+                ]),     
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                ->label('Voir plus')
+                ->icon('heroicon-m-identification')
+                ->size(ActionSize::Small)
+                ->color('info'),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                        ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
+
     }
 
     public static function getRelations(): array

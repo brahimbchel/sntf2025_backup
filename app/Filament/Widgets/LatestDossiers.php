@@ -17,8 +17,7 @@ class LatestDossiers extends BaseWidget
     protected function getTableColumns(): array
     {
         return [
-            Tables\Columns\TextColumn::make('id')->label('ID'),
-            Tables\Columns\TextColumn::make('description')->label('Description')->limit(30),
+            Tables\Columns\TextColumn::make('employe->nom')->label('Nom'),
             Tables\Columns\TextColumn::make('created_at')->label('Créé le')->date(),
         ];
     }

@@ -33,8 +33,12 @@ class DossierMedical extends Model
 	];
 
 	protected $fillable = [
-		'description',
-		'emp_id'
+		'emp_id',
+		'activite_professionnelles_anterieures',
+        'antecedents_familiaux',
+        'antecedents_personnels',
+        'maladies_professionnelles',
+        'observations'
 	];
 
 	public function employe()
@@ -42,10 +46,10 @@ class DossierMedical extends Model
 		return $this->belongsTo(Employe::class, 'emp_id');
 	}
 
-public function consultations()
-{
-    return $this->hasMany(\App\Models\Consultation::class, 'dossier_id');
-}
+	public function consultations()
+	{
+		return $this->hasMany(\App\Models\Consultation::class, 'dossier_id');
+	}
 
 
 }

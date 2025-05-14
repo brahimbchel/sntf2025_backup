@@ -19,6 +19,7 @@ class DossierMedicalResource extends Resource
     protected static string $relationship = 'consultations'; // nom de la relation Eloquent dans DossierMedical
     protected static ?string $model = DossierMedical::class;
     protected static ?string $navigationIcon = 'heroicon-o-document';
+    
 
     public static function form(Form $form): Form
     {
@@ -35,10 +36,20 @@ class DossierMedicalResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('Employe.nom')->label('Employe'),
+            Tables\Columns\TextColumn::make('employe.nom')
+                ->label('Nom')
+                ->sortable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('employe.prenom')
+                ->label('Prénom')
+                ->sortable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('employe.matricule')
+                ->label('Matricule')
+                ->sortable()
+                ->searchable(),
             ])
+
             ->filters([
                 //
             ])
@@ -47,10 +58,9 @@ class DossierMedicalResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
+
     }
 
     public static function getRelations(): array

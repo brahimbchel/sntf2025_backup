@@ -27,9 +27,11 @@ class DepartementResource extends Resource
                 Forms\Components\TextInput::make('nom')
                     ->required()
                     ->maxLength(100),
-                           Select::make('secteur_id')->label('Secteur')->relationship('Secteur', 'nom')->searchable(),
-            
-
+                Select::make('secteur_id')
+                    ->label('Secteur')
+                    ->relationship('Secteur', 'nom')
+                    ->searchable()
+                    ->preload()
             ]);
     }
 
@@ -39,7 +41,9 @@ class DepartementResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nom')
                     ->searchable(),
-                    Tables\Columns\TextColumn::make('secteur.nom')->label('secteur')
+                Tables\Columns\TextColumn::make('secteur.nom')->label('secteur')
+                ->sortable()
+                ->searchable()
             ])
             ->filters([
                 //

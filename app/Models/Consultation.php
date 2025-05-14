@@ -9,6 +9,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 /**
  * Class Consultation
@@ -43,7 +45,8 @@ class Consultation extends Model
 		'dossier_id',
 		'medecin_id',
 		'date_consultation',
-		'diagnostic'
+		'diagnostic',
+		'note'
 	];
 
 	public function dossier_medical()
@@ -51,10 +54,11 @@ class Consultation extends Model
 		return $this->belongsTo(DossierMedical::class, 'dossier_id');
 	}
 
-	public function medecin()
-	{
-		return $this->belongsTo(Medecin::class);
-	}
+	public function medecin(): BelongsTo
+{
+    return $this->belongsTo(Medecin::class, 'medecin_id');
+}
+
 
 	  public function ordonnances()
     {

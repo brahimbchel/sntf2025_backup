@@ -27,20 +27,29 @@ class MedecinResource extends Resource
                 Forms\Components\TextInput::make('nom')
                     ->required()
                     ->maxLength(100),
+
                 Forms\Components\TextInput::make('prenom')
                     ->required()
                     ->maxLength(100),
                 
                 Forms\Components\TextInput::make('tel')
-                    ->tel()
-                    ->maxLength(50),
+                    ->label("Numéro de téléphone")
+                    ->telRegex('/^(05|06|07)[0-9]{8}$/')
+                    ->required(),
+
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->maxLength(50),
-                Select::make('Specialite_id')->label('Specialite')->relationship('Specialite', 'nom')->searchable(),
-                Select::make('CentreMedical_id')->label('CMD')->relationship('Centre_Medical', 'nom')->searchable(),
-            Forms\Components\Toggle::make('gender'),
 
+                Select::make('Specialite_id')->label('Specialite')->relationship('Specialite', 'nom')->preload()->searchable(),
+                Select::make('CentreMedical_id')->label('CMS')->relationship('Centre_Medical', 'nom')->preload()->searchable(),
+            
+                Select::make('gender')
+                    ->options([
+                        'Homme' => 'Homme',
+                        'Femme' => 'Femme',
+                    ])
+                    ->required(),
             ]);
     }
 
@@ -49,18 +58,33 @@ class MedecinResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nom')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('prenom')
+                    ->sortable()
                     ->searchable(),
-                Tables\Columns\IconColumn::make('gender')
-                    ->boolean(),
+                Tables\Columns\BadgeColumn::make('gender')
+                ->label('sex')
+                ->sortable()
+                ->colors([
+                    'info' => 'Homme',
+                    'pink' => 'Femme',
+                ]),
+    
                 Tables\Columns\TextColumn::make('tel')
+                    ->label('téléphone')
+                    ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->sortable()
                     ->searchable(),
                 
-                    Tables\Columns\TextColumn::make('specialite.nom')->label('specialite'),
-                    Tables\Columns\TextColumn::make('Centre_Medical.nom')->label('CMD'),
+                Tables\Columns\TextColumn::make('specialite.nom')->label('specialité')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('Centre_Medical.nom')->label('CMS')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 //
@@ -70,9 +94,7 @@ class MedecinResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

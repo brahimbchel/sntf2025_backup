@@ -9,6 +9,9 @@ use App\Models\Specialite;
 class MedecinsBySpecialiteChart extends PieChartWidget
 {
     protected static ?string $heading = 'Médecins par Spécialité';
+    protected static ?string $maxHeight = '800px';
+
+
 
     protected function getData(): array
     {

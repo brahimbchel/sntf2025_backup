@@ -77,6 +77,18 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->colors([
+                'danger' => Color::Red,       
+                'gray' => Color::Zinc,
+                'info' => Color::Sky,         
+                'primary' => Color::Blue,      
+                'success' => Color::Green,     
+            ])
+            ->sidebarCollapsibleOnDesktop()
+            ->brandLogo(asset('images/logo.png'))
+            ->brandLogoHeight('4rem')
+            ->unsavedChangesAlerts()
+
             ->plugins([
                 FilamentShieldPlugin::make(),
             ]);
