@@ -89,10 +89,10 @@ class ConsultationRelationManager extends RelationManager
         ->icon('heroicon-o-eye')
         ->openUrlInNewTab(),
 
-    Tables\Actions\EditAction::make()
-        ->visible(fn ($record) => \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday())
-        ->tooltip('Éditer uniquement une consultation du jour')
-        ->icon('heroicon-o-pencil'),
+    Tables\Actions\EditAction::make(),
+        // ->visible(fn ($record) => \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday())
+        // ->tooltip('Éditer uniquement une consultation du jour')
+        // ->icon('heroicon-o-pencil')
 
     Tables\Actions\DeleteAction::make(),
 ])
