@@ -60,4 +60,9 @@ class Medecin extends Model
 	{
 		return $this->hasMany(Consultation::class);
 	}
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 }

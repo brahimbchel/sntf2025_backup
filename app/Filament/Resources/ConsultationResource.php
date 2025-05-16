@@ -81,7 +81,8 @@ class ConsultationResource extends Resource
             Forms\Components\DatePicker::make('date_consultation')
                 ->displayFormat('d/m/Y')
                 ->label('Date de Rendez-Vous')
-                ->minDate(now()->addDay(1)),
+                ->minDate(now()->addDay()->startOfDay()),
+                // ->minDate(now()->addDay(1)),
 
             Forms\Components\Textarea::make('diagnostic')
                 ->columnSpanFull(),

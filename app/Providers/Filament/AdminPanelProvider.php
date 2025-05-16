@@ -18,23 +18,26 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 
 class AdminPanelProvider extends PanelProvider
 {
     // Get the home URL based on the user's role
     public function getHomeUrl(): string
     {
-        $user = auth()->user();
+        // $user = auth()->user();
 
-        if ($user->hasRole('admin')) {
-            return route('filament.admin.pages.dashboard');
-        } elseif ($user->hasRole('medecin')) {
-            return route('filament.admin.pages.dashboard');
-        } elseif ($user->hasRole('employe')) {
-            return route('filament.admin.pages.dashboard');
-        } elseif ($user->hasRole('agent_de_saisie')) {
-            return route('filament.admin.pages.dashboard');
-        }
+        // if ($user->hasRole('admin')) {
+        //     return route('filament.admin.pages.dashboard');
+        // } elseif ($user->hasRole('medecin')) {
+        //     return route('filament.admin.pages.dashboard');
+        // } elseif ($user->hasRole('employe')) {
+        //     return route('filament.admin.pages.dashboard');
+        // } elseif ($user->hasRole('agent_de_saisie')) {
+        //     return route('filament.admin.pages.dashboard');
+        // }
 
         return route('filament.admin.pages.dashboard');
     }
@@ -88,9 +91,10 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('4rem')
             ->unsavedChangesAlerts()
-
+            ->databaseNotifications()
             ->plugins([
                 FilamentShieldPlugin::make(),
             ]);
     }
+
 }

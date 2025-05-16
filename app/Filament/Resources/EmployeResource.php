@@ -17,6 +17,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Support\Enums\ActionSize;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 class EmployeResource extends Resource
 {
@@ -28,8 +32,25 @@ class EmployeResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Section::make('User Information')
+                ->schema([
+                    Forms\Components\TextInput::make('user.email')
+                        ->label('Email')
+                        ->email()
+                        ->required()
+                        ->unique(User::class, 'email'),
 
-                Forms\Components\TextInput::make('nom')
+                    Forms\Components\TextInput::make('user.password')
+                        ->label('Password')
+                        ->password()
+                        ->required()
+                        ->minLength(6),
+                        // ->dehydrated(fn ($state) => filled($state)),
+                        // ->dehydrated(false), // Don't save to Employe model
+                ]),
+                Forms\Components\Section::make('Employe Information')
+                ->schema([
+                    Forms\Components\TextInput::make('nom')
                     ->required()
                     ->label('Nom')
                     ->maxLength(100),
@@ -108,6 +129,8 @@ class EmployeResource extends Resource
                         'Inactif' => 'Inactif',
                     ])
                     ->default('draft')
+                ]),
+                
             ]);
 
     }

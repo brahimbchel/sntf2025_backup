@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'guard_name' => 'web',
 'model_has_roles' => [
     'table_name' => 'model_has_roles',
     'model_morph_key' => 'model_id',

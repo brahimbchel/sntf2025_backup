@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use App\Notifications\UserCreatedNotification;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,8 @@ use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\MultiSelect;
+use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class UserResource extends Resource
 {
@@ -72,4 +75,9 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
+    public static function afterCreate(CreateRecord $action, Model $record): void
+    {
+        $record->notify(new UserCreatedNotification($record));
+    }
+
 }
