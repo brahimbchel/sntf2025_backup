@@ -4,42 +4,44 @@ namespace App\Filament\Resources\DossierMedicalResource\RelationManagers;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use App\Filament\Resources\DossierMedicalResource\RelationManagers\ExplorationFonctionnelleRelationManager;
+use App\Filament\Resources\DossierMedicalResource\RelationManagers\ExplorationComplementaireRelationManager;
+use App\Filament\Resources\DossierMedicalResource\RelationManagers\OrdonnanceRelationManager;
 use Filament\Tables;
 use Livewire\Livewire;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
+
 
 class ConsultationRelationManager extends RelationManager
 {
     protected static string $relationship = 'consultations';
 
     public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('diagnostic')
-                    ->required()
-                    ->maxLength(255),
+{
+    return $form
+        ->schema([
+            Forms\Components\Textarea::make('diagnostic')
+                ->required()
+                -> columnSpanFull()
+                ->maxLength(255),
 
-                // Utilisation des onglets
-                Forms\Components\Tabs::make('consultation_tabs')
-                    ->tabs([
-                        Forms\Components\Tabs\Tab::make('Ordonnances')
-                            ->schema([
-                                $this->getLivewireComponent('exploration-complementaire-table')
-                            ]),
+           Select::make('aptitude')
+                ->label('Aptitude')
+                ->options([
+                    'apte' => 'Apte',
+                    'apte avec reserve' => 'apte avec reserve',
+                    'inapte' => 'Inapte',
+                    'inapte définitif' => 'inapte définitif'
+                ]),
 
-                        Forms\Components\Tabs\Tab::make('Explorations Fonctionnelles')
-                            ->schema([
-                                $this->getLivewireComponent('exploration-fonctionnelle-table')
-                            ]),
+            Forms\Components\TextInput::make('note')
+                ->required()
+                ->maxLength(255),
 
-                        Forms\Components\Tabs\Tab::make('Explorations Complémentaires')
-                            ->schema([
-                                $this->getLivewireComponent('exploration-complementaire-table')
-                            ]),
-                    ])
-            ]);
-    }
+        ]);
+}
+
 
     private function getLivewireComponent(string $componentName)
     {
@@ -82,8 +84,29 @@ class ConsultationRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                
-        ])
+    Tables\Actions\ViewAction::make()
+        ->label('Voir')
+        ->icon('heroicon-o-eye')
+        ->openUrlInNewTab(),
+
+    Tables\Actions\EditAction::make()
+        ->visible(fn ($record) => \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday())
+        ->tooltip('Éditer uniquement une consultation du jour')
+        ->icon('heroicon-o-pencil'),
+
+    Tables\Actions\DeleteAction::make(),
+])
+
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
     }
+
+     public static function getRelations(): array
+    {
+        return [
+            ExplorationFonctionnelleRelationManager::class,
+            ExplorationComplementaireRelationManager::class,
+            OrdonnanceRelationManager::class,
+        ];
+    }
+
 }

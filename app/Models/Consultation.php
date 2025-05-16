@@ -38,7 +38,7 @@ class Consultation extends Model
 	protected $casts = [
 		'dossier_id' => 'int',
 		'medecin_id' => 'int',
-		'date_consultation' => 'datetime'
+		'date_consultation' => 'date'
 	];
 
 	protected $fillable = [

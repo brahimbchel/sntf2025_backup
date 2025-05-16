@@ -69,22 +69,22 @@ class ConsultationResource extends Resource
                 ])
                 ->required(),
 
-            Select::make('aptitude')
-                ->label('Aptitude')
-                ->options([
-                    'apte' => 'Apte',
-                    'apte avec reserve' => 'apte avec reserve',
-                    'inapte' => 'Inapte',
-                    'inapte définitif' => 'inapte définitif'
-                ]),
+            // Select::make('aptitude')
+            //     ->label('Aptitude')
+            //     ->options([
+            //         'apte' => 'Apte',
+            //         'apte avec reserve' => 'apte avec reserve',
+            //         'inapte' => 'Inapte',
+            //         'inapte définitif' => 'inapte définitif'
+            //     ]),
 
             Forms\Components\DatePicker::make('date_consultation')
                 ->displayFormat('d/m/Y')
                 ->label('Date de Rendez-Vous')
                 ->minDate(now()->addDay(1)),
 
-            Forms\Components\Textarea::make('diagnostic')
-                ->columnSpanFull(),
+            // Forms\Components\Textarea::make('diagnostic')
+            //     ->columnSpanFull(),
             ]);
     }
 
@@ -124,7 +124,7 @@ class ConsultationResource extends Resource
                     'success' => 'apte',
                     'danger' => 'inapte',
                     'warning' => 'inapte définitif',
-                    'indigo' => 'apte avec reserve',
+                    'gray' => 'apte avec reserve',
                 ]),
 
             Tables\Columns\TextColumn::make('date_consultation')

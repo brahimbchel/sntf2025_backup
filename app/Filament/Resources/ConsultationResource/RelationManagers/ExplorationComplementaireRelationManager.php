@@ -16,8 +16,6 @@ class ExplorationComplementaireRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('consultationidC')
-                    ->numeric(),
                 Forms\Components\TextInput::make('radio')
                     ->maxLength(100),
                 Forms\Components\TextInput::make('bio')
@@ -32,9 +30,6 @@ class ExplorationComplementaireRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('consultationidC')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('radio')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('bio')
@@ -48,13 +43,19 @@ class ExplorationComplementaireRelationManager extends RelationManager
             ->filters([
                 //
             ])
+            ->headerActions([
+            Tables\Actions\CreateAction::make()
+            ])
+            ->headerActions([
+            Tables\Actions\CreateAction::make()
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

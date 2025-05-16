@@ -13,6 +13,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\MarkdownEditor;
+
 
 class DossierMedicalResource extends Resource
 {
@@ -22,15 +26,56 @@ class DossierMedicalResource extends Resource
     
 
     public static function form(Form $form): Form
-    {
-        return $form
+{
+    return $form->schema([
+
+        Section::make('Activité Professionnelle Antérieure')
+            ->icon('heroicon-m-briefcase')
+            ->iconColor('gray')
             ->schema([
-                Forms\Components\TextInput::make('description')
-                    ->required()
-                    ->maxLength(100),
-                Select::make('emp_id')->label('Employer')->relationship('Employe', 'nom')->searchable(),
-            ]);
-    }
+                MarkdownEditor::make('activite_professionnelles_anterieures')
+                    ->label('Activités antérieures'),
+            ])
+            ->collapsible(),
+
+        Section::make('Antécédents Familiaux')
+            ->icon('heroicon-m-user-group')
+            ->iconColor('gray')
+            ->schema([
+                MarkdownEditor::make('antecedents_familiaux')
+                    ->label('Antécédents familiaux'),
+            ])
+            ->collapsible(),
+
+        Section::make('Antécédents Personnels')
+            ->icon('heroicon-m-clipboard-document-list')
+            ->iconColor('gray')
+            ->schema([
+                MarkdownEditor::make('antecedents_personnels')
+                    ->label('Antécédents personnels'),
+            ])
+            ->collapsible(),
+
+        Section::make('Maladies Professionnelles')
+            ->icon('heroicon-m-document-duplicate')
+            ->iconColor('gray')
+            ->schema([
+                MarkdownEditor::make('maladies_professionnelles')
+                    ->label('Maladies professionnelles'),
+            ])
+            ->collapsible(),
+
+        Section::make('Observations')
+            ->icon('heroicon-m-pencil-square')
+            ->iconColor('gray')
+            ->schema([
+                MarkdownEditor::make('observations')
+                    ->label('Observations'),
+            ])
+            ->collapsible(),
+    ]);
+}
+
 
     public static function table(Table $table): Table
     {

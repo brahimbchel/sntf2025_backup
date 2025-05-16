@@ -8,7 +8,8 @@ use Carbon\Carbon;
 
 class ConsultationChart extends LineChartWidget
 {
-    protected static ?string $heading = 'Consultations par Mois';
+    protected static ?string $heading = 'Consultations par mois';
+    
 
     protected function getData(): array
     { 
@@ -29,12 +30,28 @@ class ConsultationChart extends LineChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Consultations',
+                    'label' => 'rendez-vous planifié',
                     'data' => $dataset,
-                    'borderColor' => '#3b82f6',
+                    'borderColor' => '#1082f6',
                 ],
             ],
             'labels' => $labels,
         ];
     }
+    protected function getOptions(): array
+{
+    return [
+        'scales' => [
+            'y' => [
+                'ticks' => [
+                    'stepSize' => 1,
+                    'precision' => 0,
+                    'beginAtZero' => true,
+                ],
+            ],
+        ],
+    ];
+}
+
+    
 }

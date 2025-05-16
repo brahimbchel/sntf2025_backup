@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use App\Models\Departement;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
@@ -45,7 +46,19 @@ class EmployeResource extends Resource
                 Forms\Components\TextInput::make('fonction')
                     ->maxLength(100),
              
-                Select::make('departement_id')->label('departement')->preload()->relationship('Departement', 'nom')->searchable(),
+                // Select::make('departement_id')->label('departement')->preload()->relationship('Departement', 'nom')->searchable(),
+                Select::make('departement_id')
+                    ->label('Département')
+                    ->searchable()
+                    ->preload()
+                    ->options(function () {
+                        return \App\Models\Departement::with('secteur')->get()->mapWithKeys(function ($departement) {
+                            $secteurNom = $departement->secteur->nom ?? 'Aucun secteur';
+                            return [
+                                $departement->id => $departement->nom . ' (' . $secteurNom . ')'
+                            ];
+                        });
+                    }),
             
                 Forms\Components\DatePicker::make('datedenaissance')
                     ->label('Date de naissance')
