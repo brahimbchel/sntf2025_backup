@@ -33,7 +33,7 @@ class Medecin extends Model
 
 	protected $casts = [
 		'cm' => 'int',
-		'specialite_id' => 'int'
+		'specialite' => 'int'
 	];
 
 	protected $fillable = [
@@ -43,12 +43,13 @@ class Medecin extends Model
 		'tel',
 		'email',
 		'cm',
-		'specialite_id'
+		'specialite',
+		'user_id'
 	];
 
 	public function specialite()
 	{
-		return $this->belongsTo(Specialite::class,'specialite_id');
+		return $this->belongsTo(Specialite::class,'specialite');
 	}
 
 	public function centre_medical()
@@ -61,8 +62,13 @@ class Medecin extends Model
 		return $this->hasMany(Consultation::class);
 	}
 
-	public function user()
+	// public function user()
+	// {
+	// 	return $this->belongsTo(User::class);
+	// }
+
+		public function user()
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(User::class, 'user_id');
 	}
 }

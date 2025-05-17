@@ -23,6 +23,7 @@ class CreateEmploye extends CreateRecord
         $user = User::create([
             'email' => $data['user']['email'],
             'password' => Hash::make($data['user']['password']),
+            'name' => $data['user']['name'] ?? "null",
         ]);
 
          // Remove 'user' subarray from employe data

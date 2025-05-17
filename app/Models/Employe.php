@@ -70,7 +70,8 @@ class Employe extends Model
 
 	public function dossier_medicals()
 	{
-		return $this->hasOne(DossierMedical::class);
+		// return $this->hasOne(DossierMedical::class);
+		return $this->hasOne(DossierMedical::class, 'emp_id');
 
 	}
 	 /**

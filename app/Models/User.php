@@ -57,8 +57,13 @@ class User extends Authenticatable
         return $this->hasOne(Employe::class);
     }
 
+    // public function medecin()
+    // {
+    //     return $this->hasOne(Medecin::class);
+    // }
+
     public function medecin()
     {
-        return $this->hasOne(Medecin::class);
+        return $this->hasOne(Medecin::class, 'user_id');
     }
 }

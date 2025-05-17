@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MedecinResource\Pages;
 use App\Filament\Resources\MedecinResource\RelationManagers;
 use App\Models\Medecin;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Auth;
 
 class MedecinResource extends Resource
 {
@@ -20,37 +22,65 @@ class MedecinResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
+        public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    }
+
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nom')
-                    ->required()
-                    ->maxLength(100),
+                Forms\Components\Section::make('User Information')
+                    ->schema([
+                        Forms\Components\TextInput::make('user.email')
+                            ->label('Email')
+                            ->email()
+                            ->required()
+                            ->unique(User::class, 'email'),
 
-                Forms\Components\TextInput::make('prenom')
-                    ->required()
-                    ->maxLength(100),
+                        Forms\Components\TextInput::make('user.name')->required(),
+
+                        Forms\Components\TextInput::make('user.password')
+                            ->label('Password')
+                            ->password()
+                            ->required()
+                            ->minLength(6),
+                            // ->dehydrated(fn ($state) => filled($state)),
+                            // ->dehydrated(false), // Don't save to Employe model
+                    ]),
+                Forms\Components\Section::make('Medecin Information')
+                    ->schema([
+                    Forms\Components\TextInput::make('nom')
+                        ->required()
+                        ->maxLength(100),
+
+                    Forms\Components\TextInput::make('prenom')
+                        ->required()
+                        ->maxLength(100),
+                    
+                    Forms\Components\TextInput::make('tel')
+                        ->label("Numéro de téléphone")
+                        ->telRegex('/^(05|06|07)[0-9]{8}$/')
+                        ->required(),
+
+                    Forms\Components\TextInput::make('email')
+                        ->email()
+                        ->maxLength(50),
+
+                    Select::make('Specialite')->label('Specialite')->relationship('Specialite', 'nom')->preload()->searchable(),
+                    Select::make('CentreMedical_id')->label('CMS')->relationship('Centre_Medical', 'nom')->preload()->searchable(),
                 
-                Forms\Components\TextInput::make('tel')
-                    ->label("Numéro de téléphone")
-                    ->telRegex('/^(05|06|07)[0-9]{8}$/')
-                    ->required(),
-
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->maxLength(50),
-
-                Select::make('Specialite_id')->label('Specialite')->relationship('Specialite', 'nom')->preload()->searchable(),
-                Select::make('CentreMedical_id')->label('CMS')->relationship('Centre_Medical', 'nom')->preload()->searchable(),
-            
-                Select::make('gender')
-                    ->options([
-                        'Homme' => 'Homme',
-                        'Femme' => 'Femme',
-                    ])
-                    ->required(),
+                    Select::make('gender')
+                        ->options([
+                            'Homme' => 'Homme',
+                            'Femme' => 'Femme',
+                        ])
+                        ->required(),
+                ])
             ]);
+            
     }
 
     public static function table(Table $table): Table

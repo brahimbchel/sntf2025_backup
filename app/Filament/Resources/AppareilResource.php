@@ -19,6 +19,8 @@ class AppareilResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
+    
+
     public static function form(Form $form): Form
     {
         return $form

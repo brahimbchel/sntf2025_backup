@@ -24,6 +24,11 @@ class DossierMedicalResource extends Resource
     {
         $user = auth()->user();
 
+        // If the user is admin, show everything
+        if ($user->hasRole('admin') || $user->hasRole('Super Admin') || $user->hasRole('admin-agent')) {
+            return parent::getEloquentQuery();
+        }
+
         // Show only the dossier for the logged-in user's employee ID
         return parent::getEloquentQuery()
             ->where('emp_id', $user->employe->id ?? 0);

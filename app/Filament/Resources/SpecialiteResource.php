@@ -20,9 +20,14 @@ class SpecialiteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function canViewAny(): bool
+        public static function canViewAny(): bool
     {
-        return Auth::user()?->hasRole('specialite') ?? false;
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    }
+
+        public static function canCreate(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin']);
     }
 
     public static function form(Form $form): Form

@@ -12,12 +12,19 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class RubriqueResource extends Resource
 {
     protected static ?string $model = Rubrique::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
+
+        public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    }
+
 
     public static function form(Form $form): Form
     {
