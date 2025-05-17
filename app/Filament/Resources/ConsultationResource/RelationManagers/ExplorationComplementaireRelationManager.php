@@ -10,7 +10,7 @@ use Filament\Tables\Table;
 
 class ExplorationComplementaireRelationManager extends RelationManager
 {
-    protected static string $relationship = 'exploration_complementaire'; // nom de la relation dans le modèle Consultation
+    protected static string $relationship = 'exploration_fonctionnelle'; // nom de la relation dans le modèle Consultation
 
      public  function form(Form $form): Form
     {

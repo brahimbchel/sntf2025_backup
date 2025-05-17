@@ -163,7 +163,7 @@ class ConsultationResource extends Resource
         RelationManagers\OrdonnanceRelationManager::class,
         RelationManagers\ExplorationComplementaireRelationManager::class,
         RelationManagers\ExplorationFonctionnelleRelationManager::class,
-       // RelationManagers\ResultatRelationManager::class,
+    //    RelationManagers\AppareilsRelationManager::class,
     ];
 }
 

@@ -38,6 +38,43 @@ class ConsultationRelationManager extends RelationManager
             Forms\Components\TextInput::make('note')
                 ->required()
                 ->maxLength(255),
+                 
+            Forms\Components\Section::make('Explorations Fonctionnelles')
+                ->schema([
+                    
+                    Forms\Components\Repeater::make('exploration_fonctionnelle')
+                        ->relationship('exploration_fonctionnelle')
+                        ->schema([
+                            Forms\Components\Textarea::make('FRSP')->label('Fonction Respiratoire'),
+                            Forms\Components\Textarea::make('FCIR')->label('Fonction Circulaires'),
+                            Forms\Components\Textarea::make('FMOT')->label('Fonction Motricitr '),
+                            Forms\Components\DatePicker::make('date_exploration')->label('Date Exploration'),
+                        ])
+                        ->columns(1),
+                ]),
+
+                Forms\Components\Section::make('Explorations Complementaires')
+                ->schema([
+                    Forms\Components\Repeater::make('exploration_complementaire')
+                        ->relationship('exploration_complementaire')
+                        ->schema([
+                            Forms\Components\Textarea::make('toxic')->label('toxicologique'),
+                            Forms\Components\Textarea::make('bio')->label('biologique'),
+                            Forms\Components\Textarea::make('radio')->label('radiologique'),                            Forms\Components\Textarea::make('recommandations')->label('Recommandations'),
+                        ])
+                        ->columns(1),
+                ]),
+
+                    Forms\Components\Section::make('Ordonnances')
+                ->schema([
+                    Forms\Components\Repeater::make('ordonnances')
+                        ->relationship('ordonnances')
+                        ->schema([
+                            Forms\Components\DatePicker::make('date_ordonnance')->label('Date Ordonnance'),
+                            Forms\Components\Textarea::make('recommandations')->label('Recommandations'),
+                        ])
+                        ->columns(1),
+                ]),
 
         ]);
 }
@@ -84,17 +121,16 @@ class ConsultationRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-    Tables\Actions\ViewAction::make()
-        ->label('Voir')
-        ->icon('heroicon-o-eye')
-        ->openUrlInNewTab(),
+            Tables\Actions\ViewAction::make()
+                ->label('Voir')
+                ->icon('heroicon-o-eye')
+                ->openUrlInNewTab(),
 
-    Tables\Actions\EditAction::make(),
-        // ->visible(fn ($record) => \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday())
-        // ->tooltip('Éditer uniquement une consultation du jour')
-        // ->icon('heroicon-o-pencil')
+            Tables\Actions\EditAction::make()
+                ->visible(fn ($record) => \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday())
+                ->tooltip('Éditer uniquement une consultation du jour')
+                ->icon('heroicon-o-pencil'),
 
-    Tables\Actions\DeleteAction::make(),
 ])
 
             ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);

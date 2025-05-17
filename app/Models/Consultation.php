@@ -75,7 +75,7 @@ class Consultation extends Model
         return $this->hasMany(ExplorationComplementaire::class, 'consultationidC');
     }
 
-    public function resultats()
+    public function Appareils()
     {
         return $this->hasMany(Resultat::class, 'consultation_id');
     }

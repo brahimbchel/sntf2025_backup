@@ -25,11 +25,18 @@ class Appareil extends Model
 	public $timestamps = false;
 
 	protected $fillable = [
-		'nom'
+		'nom',
+		'interrogatoire',
+		'examenClinique'
 	];
 
 	public function rubriques()
 	{
 		return $this->hasMany(Rubrique::class, 'App_id');
+	}
+
+	public function consultation()
+	{
+		return $this->belongsTo(Consultation::class, 'consultation_id');
 	}
 }
