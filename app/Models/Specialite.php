@@ -30,6 +30,6 @@ class Specialite extends Model
 
 	public function medecins()
 	{
-		return $this->hasMany(Medecin::class, 'specialite_id');
+		return $this->hasMany(Medecin::class, 'specialite');
 	}
 }

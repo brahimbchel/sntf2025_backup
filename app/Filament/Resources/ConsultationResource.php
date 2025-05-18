@@ -24,6 +24,28 @@ class ConsultationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
+    public static function getEloquentQuery(): Builder
+{
+    $query = parent::getEloquentQuery();
+    $user = auth()->user();
+
+    if ($user->hasRole('admin') || $user->hasRole('agent')) {
+        return $query; // Agents and admins see all consultations
+    }
+
+    if ($user->hasRole('medecin')) {
+        return $query->where('medecin_id', $user->medecin->id);
+    }
+
+    if ($user->hasRole('employe')) {
+        return $query->where('dossier_id', $user->employe->dossier_medicals->id ?? 0);
+    }
+
+    // return $query->where('dossier_id', $user->employe->dossier_medicals->id ?? 0);
+
+    return $query; // Fallback for other roles
+}
+
     public static function form(Form $form): Form
     {
         return $form
@@ -69,19 +91,20 @@ class ConsultationResource extends Resource
                 ])
                 ->required(),
 
-            // Select::make('aptitude')
-            //     ->label('Aptitude')
-            //     ->options([
-            //         'apte' => 'Apte',
-            //         'apte avec reserve' => 'apte avec reserve',
-            //         'inapte' => 'Inapte',
-            //         'inapte définitif' => 'inapte définitif'
-            //     ]),
+            Select::make('aptitude')
+                ->label('Aptitude')
+                ->options([
+                    'apte' => 'Apte',
+                    'apte avec reserve' => 'apte avec reserve',
+                    'inapte' => 'Inapte',
+                    'inapte définitif' => 'inapte définitif'
+                ]),
 
             Forms\Components\DatePicker::make('date_consultation')
                 ->displayFormat('d/m/Y')
                 ->label('Date de Rendez-Vous')
-                ->minDate(now()->addDay(1)),
+                ->minDate(now()->addDay()->startOfDay()),
+                // ->minDate(now()->addDay(1)),
 
             // Forms\Components\Textarea::make('diagnostic')
             //     ->columnSpanFull(),

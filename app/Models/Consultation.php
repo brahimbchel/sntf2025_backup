@@ -46,6 +46,8 @@ class Consultation extends Model
 		'medecin_id',
 		'date_consultation',
 		'diagnostic',
+		'type',
+		'aptitude',
 		'note'
 	];
 

@@ -10,7 +10,7 @@ use Filament\Tables\Table;
 
 class ExplorationComplementaireRelationManager extends RelationManager
 {
-    protected static string $relationship = 'exploration_fonctionnelle'; // nom de la relation dans le modèle Consultation
+    protected static string $relationship = 'exploration_Complementaire'; // nom de la relation dans le modèle Consultation
 
      public  function form(Form $form): Form
     {
@@ -22,7 +22,7 @@ class ExplorationComplementaireRelationManager extends RelationManager
                     ->maxLength(100),
                 Forms\Components\TextInput::make('toxic')
                     ->maxLength(100),
-                Forms\Components\DatePicker::make('date_exploration'),
+                // Forms\Components\DatePicker::make('date_exploration'),
             ]);
     }
 
@@ -36,9 +36,9 @@ class ExplorationComplementaireRelationManager extends RelationManager
                     ->searchable(),
                 Tables\Columns\TextColumn::make('toxic')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('date_exploration')
-                    ->date()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('date_exploration')
+                //     ->date()
+                //     ->sortable(),
             ])
             ->filters([
                 //

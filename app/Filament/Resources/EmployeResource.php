@@ -25,6 +25,22 @@ class EmployeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
+        public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user->hasRole('admin') || $user->hasRole('agent')) {
+            return $query; // Agents and admins see all consultations
+        }
+
+        if ($user->hasRole('employe')) {
+            return $query->where('id', $user->employe->id ?? 0);
+        }
+
+        return $query; // Fallback for other roles like medecin in this case
+    }
+
     public static function form(Form $form): Form
     {
         return $form

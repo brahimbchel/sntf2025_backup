@@ -12,12 +12,25 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ResultatResource extends Resource
 {
     protected static ?string $model = Resultat::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
+
+    // // this is the corect one
+    //  ublic static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;
+    // }
+
+    // temporary
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    }
 
     public static function form(Form $form): Form
     {

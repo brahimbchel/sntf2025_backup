@@ -13,12 +13,18 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Auth;
 
 class DepartementResource extends Resource
 {
     protected static ?string $model = Departement::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-home';
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasRole('admin') ?? false;
+    }
 
     public static function form(Form $form): Form
     {

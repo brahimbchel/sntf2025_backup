@@ -16,7 +16,7 @@ class OrdonnanceRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\DatePicker::make('date_ordonnance'),
+                // Forms\Components\DatePicker::make('date_ordonnance'),
                 Forms\Components\Textarea::make('recommandations')
                     ->columnSpanFull(),
             ]);
@@ -26,8 +26,8 @@ class OrdonnanceRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('date_ordonnance')
-                    ->date()
+                Tables\Columns\TextColumn::make('recommandations')
+                    ->limit(50)
                     ->sortable(),
             ])
             ->filters([

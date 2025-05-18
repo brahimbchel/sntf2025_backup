@@ -12,12 +12,18 @@ use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\MultiSelect;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    }
 
     public static function form(Form $form): Form
     {

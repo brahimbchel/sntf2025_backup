@@ -16,13 +16,20 @@ class ExplorationFonctionnelleRelationManager extends RelationManager
     {
         return $form
             ->schema([
-               Forms\Components\Textarea::make('FRSP')
+                Forms\Components\Textarea::make('FRSP')
+                    ->label('Fonction Respiratoire (FRSP)')
                     ->columnSpanFull(),
+
                 Forms\Components\Textarea::make('FCIR')
+                    ->label('Fonction Circulatoire (FCIR)')
                     ->columnSpanFull(),
+
                 Forms\Components\Textarea::make('FMOT')
+                    ->label('Fonction Motrice (FMOT)')
                     ->columnSpanFull(),
-                Forms\Components\DatePicker::make('date_exploration'),
+
+                // Forms\Components\DatePicker::make('date_exploration')
+                //     ->label('Date de l\'exploration'),
             ]);
     }
 
@@ -33,12 +40,21 @@ class ExplorationFonctionnelleRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('consultationid')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('date_exploration')
-                    ->date()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('FRSP')
+                    ->label('Fonction Respiratoire (FRSP)'),
+                Tables\Columns\TextColumn::make('FCIR')
+                    ->label('Fonction Circulatoire (FCIR)'),
+                Tables\Columns\TextColumn::make('FMOT')
+                    ->label('Fonction Motrice (FMOT)'),
+                // Tables\Columns\TextColumn::make('date_exploration')
+                //     ->date()
+                //     ->sortable(),
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make()
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
