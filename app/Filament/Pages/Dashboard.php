@@ -3,6 +3,7 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Dashboard as BaseDashboard;
 use App\Filament\Widgets;
+// use App\Filament\Widgets\MedecinConsultationChart;
 
 class Dashboard extends BaseDashboard
 {
@@ -25,7 +26,7 @@ class Dashboard extends BaseDashboard
             EmployeeDossierBarChart::class,
             MedecinOccupancy::class,
             ConsultationsStatistiques::class,
-
+            // MedecinConsultationChart::class,
         ];
     }
 }

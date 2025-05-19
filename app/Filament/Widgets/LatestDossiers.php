@@ -6,9 +6,17 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables;
 use App\Models\DossierMedical;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class LatestDossiers extends BaseWidget
 {
+
+    public static function canView(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    }
+
+    protected static ?int $sort = 10;
 
     protected static ?string $heading = 'Derniers dossiers ';
 

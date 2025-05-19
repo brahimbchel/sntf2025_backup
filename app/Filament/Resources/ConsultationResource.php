@@ -56,6 +56,7 @@ class ConsultationResource extends Resource
                 ->options(
                     \App\Models\DossierMedical::with('employe') // Charger les employés associés aux dossiers
                         ->get()
+                        ->filter(fn ($dossier) => $dossier->employe)
                         ->mapWithKeys(fn ($dossier) => [
                             $dossier->id => $dossier->employe->nom . ' ' . $dossier->employe->prenom
                         ])
@@ -186,7 +187,7 @@ class ConsultationResource extends Resource
         RelationManagers\OrdonnanceRelationManager::class,
         RelationManagers\ExplorationComplementaireRelationManager::class,
         RelationManagers\ExplorationFonctionnelleRelationManager::class,
-    //    RelationManagers\AppareilsRelationManager::class,
+        RelationManagers\AppRelationManager::class,
     ];
 }
 

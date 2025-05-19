@@ -6,9 +6,17 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use App\Models\Consultation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ConsultationsStatistiques extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    }
+
+    protected static ?int $sort = 10;
+
     protected function getCards(): array
     {
         $aujourdhui = Carbon::today();

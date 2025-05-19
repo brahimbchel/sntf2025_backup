@@ -8,9 +8,17 @@ use App\Models\Employe;
 use App\Models\Medecin;
 use App\Models\Consultation;
 use App\Models\DossierMedical;
+use Illuminate\Support\Facades\Auth;
 
 class StatsOverview extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    }
+
+    protected static ?int $sort = 10;
+
     protected function getCards(): array
     {
         return [

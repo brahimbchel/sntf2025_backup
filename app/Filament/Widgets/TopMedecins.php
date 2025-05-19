@@ -6,9 +6,17 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables;
 use App\Models\Medecin;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class TopMedecins extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    }
+
+    protected static ?int $sort = 10;
+
     protected function getTableQuery(): Builder
     {
         return Medecin::withCount('consultations')

@@ -36,12 +36,18 @@ class ResultatResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('rubrique_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('consultation_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('consultation_id')
+                    ->relationship('consultation', 'id') // or use a custom title
+                    ->required(),
+                Forms\Components\Select::make('rubrique_id')
+                    ->relationship('rubrique', 'titre')
+                    ->required(),
+                // Forms\Components\TextInput::make('rubrique_id')
+                //     ->required()
+                //     ->numeric(),
+                // Forms\Components\TextInput::make('consultation_id')
+                //     ->required()
+                //     ->numeric(),
                 Forms\Components\DatePicker::make('dateR')
                     ->required(),
                 Forms\Components\TextInput::make('resultat')

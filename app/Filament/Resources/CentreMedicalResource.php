@@ -20,7 +20,7 @@ class CentreMedicalResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
-     public static function canViewAny(): bool
+    public static function canViewAny(): bool
     {
         return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
     }

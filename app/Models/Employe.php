@@ -55,8 +55,13 @@ class Employe extends Model
 		'groupe_sanguin',
 		'situation_familiale',
 		'service_national',
+		'user_id'
 	];
 
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 
 	public function departement()
 	{
@@ -65,9 +70,10 @@ class Employe extends Model
 
 	public function dossier_medicals()
 	{
-		return $this->hasOne(DossierMedical::class);
+		return $this->hasOne(DossierMedical::class, 'emp_id');
 
 	}
+	
 	 /**
      * Boot method to handle model events.
      */

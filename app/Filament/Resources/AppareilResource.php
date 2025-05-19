@@ -41,6 +41,9 @@ class AppareilResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nom')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('rubriques_count')
+                ->counts('rubriques')
+                ->label('Rubriques'),
             ])
             ->filters([
                 //

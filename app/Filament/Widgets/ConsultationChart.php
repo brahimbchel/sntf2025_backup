@@ -5,11 +5,18 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\LineChartWidget;
 use App\Models\Consultation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ConsultationChart extends LineChartWidget
 {
     protected static ?string $heading = 'Consultations par mois';
+
+    protected static ?int $sort = 10;
     
+    public static function canView(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    }
 
     protected function getData(): array
     { 

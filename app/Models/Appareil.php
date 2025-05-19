@@ -35,6 +35,8 @@ class Appareil extends Model
 		return $this->hasMany(Rubrique::class, 'App_id');
 	}
 
+	
+
 	public function consultation()
 	{
 		return $this->belongsTo(Consultation::class, 'consultation_id');

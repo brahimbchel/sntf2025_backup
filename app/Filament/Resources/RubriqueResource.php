@@ -30,10 +30,12 @@ class RubriqueResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('App_id')
-                    ->numeric(),
+                    ->relationship('appareil', 'nom')
+                    ->required(),
                 Forms\Components\TextInput::make('titre')
                     ->maxLength(100),
-                Forms\Components\Toggle::make('visible'),
+                Forms\Components\Toggle::make('visible')
+                    ->default(true),
             ]);
     }
 

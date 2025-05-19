@@ -43,8 +43,14 @@ class Medecin extends Model
 		'tel',
 		'email',
 		'cm',
-		'specialite_id'
+		'specialite_id',
+		'user_id'
 	];
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 
 	public function specialite()
 	{
