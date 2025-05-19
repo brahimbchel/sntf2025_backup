@@ -24,17 +24,17 @@ class AdminPanelProvider extends PanelProvider
     // Get the home URL based on the user's role
     public function getHomeUrl(): string
     {
-        $user = auth()->user();
+        // $user = auth()->user();
 
-        if ($user->hasRole('admin')) {
-            return route('filament.admin.pages.dashboard');
-        } elseif ($user->hasRole('medecin')) {
-            return route('filament.admin.pages.dashboard');
-        } elseif ($user->hasRole('employe')) {
-            return route('filament.admin.pages.dashboard');
-        } elseif ($user->hasRole('agent_de_saisie')) {
-            return route('filament.admin.pages.dashboard');
-        }
+        // if ($user->hasRole('admin')) {
+        //     return route('filament.admin.pages.dashboard');
+        // } elseif ($user->hasRole('medecin')) {
+        //     return route('filament.admin.pages.dashboard');
+        // } elseif ($user->hasRole('employe')) {
+        //     return route('filament.admin.pages.dashboard');
+        // } elseif ($user->hasRole('agent_de_saisie')) {
+        //     return route('filament.admin.pages.dashboard');
+        // }
 
         return route('filament.admin.pages.dashboard');
     }
@@ -45,7 +45,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('')
             ->login()
             ->homeUrl('/')
             ->authMiddleware([
@@ -77,6 +77,18 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->colors([
+                'danger' => Color::Red,       
+                'gray' => Color::Zinc,
+                'info' => Color::Sky,         
+                'primary' => Color::Blue,      
+                'success' => Color::Green,     
+            ])
+            ->sidebarCollapsibleOnDesktop()
+            ->brandLogo(asset('images/logo.png'))
+            ->brandLogoHeight('4rem')
+            ->unsavedChangesAlerts()
+
             ->plugins([
                 FilamentShieldPlugin::make(),
             ]);

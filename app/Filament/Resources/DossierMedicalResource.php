@@ -13,32 +13,101 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\MarkdownEditor;
+
 
 class DossierMedicalResource extends Resource
 {
     protected static string $relationship = 'consultations'; // nom de la relation Eloquent dans DossierMedical
     protected static ?string $model = DossierMedical::class;
     protected static ?string $navigationIcon = 'heroicon-o-document';
+    
+     public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        // If the user is admin, show everything
+        if ($user->hasRole('admin') || $user->hasRole('Super Admin') || $user->hasRole('admin-agent')) {
+            return parent::getEloquentQuery();
+        }
+
+        // Show only the dossier for the logged-in user's employee ID
+        return parent::getEloquentQuery()
+            ->where('emp_id', $user->employe->id ?? 0);
+    }
 
     public static function form(Form $form): Form
-    {
-        return $form
+{
+    return $form->schema([
+
+        Section::make('Activité Professionnelle Antérieure')
+            ->icon('heroicon-m-briefcase')
+            ->iconColor('gray')
             ->schema([
-                Forms\Components\TextInput::make('description')
-                    ->required()
-                    ->maxLength(100),
-                Select::make('emp_id')->label('Employer')->relationship('Employe', 'nom')->searchable(),
-            ]);
-    }
+                MarkdownEditor::make('activite_professionnelles_anterieures')
+                    ->label('Activités antérieures'),
+            ])
+            ->collapsible(),
+
+        Section::make('Antécédents Familiaux')
+            ->icon('heroicon-m-user-group')
+            ->iconColor('gray')
+            ->schema([
+                MarkdownEditor::make('antecedents_familiaux')
+                    ->label('Antécédents familiaux'),
+            ])
+            ->collapsible(),
+
+        Section::make('Antécédents Personnels')
+            ->icon('heroicon-m-clipboard-document-list')
+            ->iconColor('gray')
+            ->schema([
+                MarkdownEditor::make('antecedents_personnels')
+                    ->label('Antécédents personnels'),
+            ])
+            ->collapsible(),
+
+        Section::make('Maladies Professionnelles')
+            ->icon('heroicon-m-document-duplicate')
+            ->iconColor('gray')
+            ->schema([
+                MarkdownEditor::make('maladies_professionnelles')
+                    ->label('Maladies professionnelles'),
+            ])
+            ->collapsible(),
+
+        Section::make('Observations')
+            ->icon('heroicon-m-pencil-square')
+            ->iconColor('gray')
+            ->schema([
+                MarkdownEditor::make('observations')
+                    ->label('Observations'),
+            ])
+            ->collapsible(),
+    ]);
+}
+
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('Employe.nom')->label('Employe'),
+            Tables\Columns\TextColumn::make('employe.nom')
+                ->label('Nom')
+                ->sortable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('employe.prenom')
+                ->label('Prénom')
+                ->sortable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('employe.matricule')
+                ->label('Matricule')
+                ->sortable()
+                ->searchable(),
             ])
+
             ->filters([
                 //
             ])
@@ -47,10 +116,9 @@ class DossierMedicalResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
+
     }
 
     public static function getRelations(): array

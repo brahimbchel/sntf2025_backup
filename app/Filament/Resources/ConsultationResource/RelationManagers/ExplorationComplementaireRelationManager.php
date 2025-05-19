@@ -10,21 +10,19 @@ use Filament\Tables\Table;
 
 class ExplorationComplementaireRelationManager extends RelationManager
 {
-    protected static string $relationship = 'exploration_complementaire'; // nom de la relation dans le modèle Consultation
+    protected static string $relationship = 'exploration_Complementaire'; // nom de la relation dans le modèle Consultation
 
      public  function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('consultationidC')
-                    ->numeric(),
                 Forms\Components\TextInput::make('radio')
                     ->maxLength(100),
                 Forms\Components\TextInput::make('bio')
                     ->maxLength(100),
                 Forms\Components\TextInput::make('toxic')
                     ->maxLength(100),
-                Forms\Components\DatePicker::make('date_exploration'),
+                // Forms\Components\DatePicker::make('date_exploration'),
             ]);
     }
 
@@ -32,21 +30,24 @@ class ExplorationComplementaireRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('consultationidC')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('radio')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('bio')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('toxic')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('date_exploration')
-                    ->date()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('date_exploration')
+                //     ->date()
+                //     ->sortable(),
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+            Tables\Actions\CreateAction::make()
+            ])
+            ->headerActions([
+            Tables\Actions\CreateAction::make()
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -54,7 +55,7 @@ class ExplorationComplementaireRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

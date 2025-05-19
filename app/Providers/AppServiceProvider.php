@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Filament\Facades\Filament;
+use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentColor;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
    public function boot(): void
 {
+    FilamentColor::register([
+    'pink' => Color::rgb('rgb(255, 146, 199)'),
+]);
 
 }
 

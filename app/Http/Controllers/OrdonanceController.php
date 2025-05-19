@@ -136,4 +136,8 @@ class OrdonanceController extends Controller
 
         return response()->json(['message' => 'Ordonnance deleted']);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> bm_dani

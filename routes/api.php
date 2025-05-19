@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\CentreMedicalController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DossierMedicalController;
-use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\ExplorationFonctionnelleController;
 use App\Http\Controllers\MedecinController;
 use App\Http\Controllers\MedicamentController;
@@ -28,6 +28,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 Route::apiResource('secteur', SecteurController::class);
 
@@ -53,5 +56,6 @@ Route::apiResource('exploration-fonctionelle', ExplorationFonctionnelleControlle
 Route::apiResource('medicaments', MedicamentController::class);
 
 Route::apiResource('ordonnances', OrdonanceController::class);
-Route::get('employes/{id}/ordonnances', [OrdonanceController::class, 'getOrdonnancesWithMedicaments']);
- // getOrdonnancesWithMedicaments
+Route::get('employes/{id}/ordonnances', [OrdonanceController::class, 'getOrdonnancesWithMedicaments']); // getOrdonnancesWithMedicaments
+
+// ---

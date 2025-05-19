@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class ResultatResource extends Resource
 {
@@ -19,16 +20,34 @@ class ResultatResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
 
+    // // this is the corect one
+    //  ublic static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;
+    // }
+
+    // temporary
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('rubrique_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('consultation_id')
-                    ->required()
-                    ->numeric(),
+                Forms\Components\Select::make('consultation_id')
+                    ->relationship('consultation', 'id') // or use a custom title
+                    ->required(),
+                Forms\Components\Select::make('rubrique_id')
+                    ->relationship('rubrique', 'titre')
+                    ->required(),
+                // Forms\Components\TextInput::make('rubrique_id')
+                //     ->required()
+                //     ->numeric(),
+                // Forms\Components\TextInput::make('consultation_id')
+                //     ->required()
+                //     ->numeric(),
                 Forms\Components\DatePicker::make('dateR')
                     ->required(),
                 Forms\Components\TextInput::make('resultat')

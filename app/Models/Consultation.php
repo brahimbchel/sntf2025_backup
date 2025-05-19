@@ -9,6 +9,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 /**
  * Class Consultation
@@ -36,14 +38,17 @@ class Consultation extends Model
 	protected $casts = [
 		'dossier_id' => 'int',
 		'medecin_id' => 'int',
-		'date_consultation' => 'datetime'
+		'date_consultation' => 'date'
 	];
 
 	protected $fillable = [
 		'dossier_id',
 		'medecin_id',
 		'date_consultation',
-		'diagnostic'
+		'diagnostic',
+		'type',
+		'aptitude',
+		'note'
 	];
 
 	public function dossier_medical()
@@ -51,10 +56,11 @@ class Consultation extends Model
 		return $this->belongsTo(DossierMedical::class, 'dossier_id');
 	}
 
-	public function medecin()
-	{
-		return $this->belongsTo(Medecin::class);
-	}
+	public function medecin(): BelongsTo
+{
+    return $this->belongsTo(Medecin::class, 'medecin_id');
+}
+
 
 	  public function ordonnances()
     {
@@ -71,8 +77,13 @@ class Consultation extends Model
         return $this->hasMany(ExplorationComplementaire::class, 'consultationidC');
     }
 
-    public function resultats()
+    public function Appareils()
     {
         return $this->hasMany(Resultat::class, 'consultation_id');
     }
+
+		public function resultats()
+	{
+		return $this->hasMany(Resultat::class, 'consultation_id');
+	}
 }

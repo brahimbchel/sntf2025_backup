@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class RubriqueResource extends Resource
 {
@@ -19,15 +20,22 @@ class RubriqueResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('App_id')
-                    ->numeric(),
+                    ->relationship('appareil', 'nom')
+                    ->required(),
                 Forms\Components\TextInput::make('titre')
                     ->maxLength(100),
-                Forms\Components\Toggle::make('visible'),
+                Forms\Components\Toggle::make('visible')
+                    ->default(true),
             ]);
     }
 

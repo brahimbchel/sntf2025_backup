@@ -12,12 +12,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class SecteurResource extends Resource
 {
     protected static ?string $model = Secteur::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    }
 
     public static function form(Form $form): Form
     {

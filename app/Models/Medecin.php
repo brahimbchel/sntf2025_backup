@@ -32,9 +32,8 @@ class Medecin extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'gender' => 'bool',
 		'cm' => 'int',
-		'specialite' => 'int'
+		'specialite_id' => 'int'
 	];
 
 	protected $fillable = [
@@ -44,12 +43,18 @@ class Medecin extends Model
 		'tel',
 		'email',
 		'cm',
-		'specialite'
+		'specialite_id',
+		'user_id'
 	];
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 
 	public function specialite()
 	{
-		return $this->belongsTo(Specialite::class, 'specialite');
+		return $this->belongsTo(Specialite::class,'specialite_id');
 	}
 
 	public function centre_medical()

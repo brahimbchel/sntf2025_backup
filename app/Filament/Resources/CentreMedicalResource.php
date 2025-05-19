@@ -12,12 +12,18 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class CentreMedicalResource extends Resource
 {
     protected static ?string $model = CentreMedical::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+
+    public static function canViewAny(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    }
 
     public static function form(Form $form): Form
     {

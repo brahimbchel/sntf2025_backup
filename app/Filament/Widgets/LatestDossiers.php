@@ -6,9 +6,20 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables;
 use App\Models\DossierMedical;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class LatestDossiers extends BaseWidget
 {
+
+    public static function canView(): bool
+    {
+        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    }
+
+    protected static ?int $sort = 10;
+
+    protected static ?string $heading = 'Derniers dossiers ';
+
     protected function getTableQuery(): Builder
     {
         return DossierMedical::latest()->limit(5);
@@ -17,9 +28,10 @@ class LatestDossiers extends BaseWidget
     protected function getTableColumns(): array
     {
         return [
-            Tables\Columns\TextColumn::make('id')->label('ID'),
-            Tables\Columns\TextColumn::make('description')->label('Description')->limit(30),
-            Tables\Columns\TextColumn::make('created_at')->label('Créé le')->date(),
+            Tables\Columns\TextColumn::make('employe.nom')->label('Nom'),
+            Tables\Columns\TextColumn::make('employe.prenom')->label('Prénom'),
+            Tables\Columns\TextColumn::make('employe.departement.nom')->label('Département'),
+            Tables\Columns\TextColumn::make('created_at')->label('Créé le')->dateTime('d/m/Y')
         ];
     }
 }

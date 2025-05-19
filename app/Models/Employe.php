@@ -37,14 +37,13 @@ class Employe extends Model
 
 	protected $casts = [
 		'departement_id' => 'int',
-		'datedenaissance' => 'datetime',
-		'gender' => 'bool',
-		'etat' => 'bool'
-	];
+		'datedenaissance' => 'datetime'
+		];
 
-	protected $fillable = [
+		protected $fillable = [
 		'nom',
 		'prenom',
+		'matricule',
 		'fonction',
 		'departement_id',
 		'datedenaissance',
@@ -52,8 +51,17 @@ class Employe extends Model
 		'adresse',
 		'tel',
 		'email',
-		'etat'
+		'etat',
+		'groupe_sanguin',
+		'situation_familiale',
+		'service_national',
+		'user_id'
 	];
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
 
 	public function departement()
 	{
@@ -62,6 +70,22 @@ class Employe extends Model
 
 	public function dossier_medicals()
 	{
-		return $this->hasMany(DossierMedical::class, 'emp_id');
+		return $this->hasOne(DossierMedical::class, 'emp_id');
+
 	}
+	
+	 /**
+     * Boot method to handle model events.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Automatically create a DossierMedical when an Employe is created
+        static::created(function ($employe) {
+            DossierMedical::create([               
+                'emp_id' => $employe->id,
+            ]);
+        });
+    }
 }

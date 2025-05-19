@@ -16,19 +16,9 @@ class OrdonnanceRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                // Forms\Components\TextInput::make('consultation_id')
-                //     ->numeric(),
                 // Forms\Components\DatePicker::make('date_ordonnance'),
-                // Forms\Components\Textarea::make('recommandations')
-                //     ->columnSpanFull(),
-                    
-                Forms\Components\DatePicker::make('date_ordonnance')
-                    ->label('Date de l\'ordonnance')
-                    ->required(),
-                
                 Forms\Components\Textarea::make('recommandations')
-                    ->label('Recommandations')
-                    ->placeholder('Entrer les recommandations ici...')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -36,15 +26,15 @@ class OrdonnanceRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('consultation_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('date_ordonnance')
-                    ->date()
+                Tables\Columns\TextColumn::make('recommandations')
+                    ->limit(50)
                     ->sortable(),
             ])
             ->filters([
                 //
+            ])
+            ->headerActions([
+            Tables\Actions\CreateAction::make()
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
