@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use App\Models\Departement;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
@@ -43,10 +44,29 @@ class EmployeResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
+            return $form
             ->schema([
+                Forms\Components\Section::make('User Information')
+                ->schema([
+                    Forms\Components\TextInput::make('user.email')
+                        ->label('Email')
+                        ->email()
+                        ->required()
+                        ->unique(User::class, 'email'),
 
-                Forms\Components\TextInput::make('nom')
+                    Forms\Components\TextInput::make('user.name')->required(),
+
+                    Forms\Components\TextInput::make('user.password')
+                        ->label('Password')
+                        ->password()
+                        ->required()
+                        ->minLength(6),
+                        // ->dehydrated(fn ($state) => filled($state)),
+                        // ->dehydrated(false), // Don't save to Employe model
+                ]),
+                Forms\Components\Section::make('Employe Information')
+                ->schema([
+                    Forms\Components\TextInput::make('nom')
                     ->required()
                     ->label('Nom')
                     ->maxLength(100),
@@ -62,19 +82,7 @@ class EmployeResource extends Resource
                 Forms\Components\TextInput::make('fonction')
                     ->maxLength(100),
              
-                // Select::make('departement_id')->label('departement')->preload()->relationship('Departement', 'nom')->searchable(),
-                Select::make('departement_id')
-                    ->label('Département')
-                    ->searchable()
-                    ->preload()
-                    ->options(function () {
-                        return \App\Models\Departement::with('secteur')->get()->mapWithKeys(function ($departement) {
-                            $secteurNom = $departement->secteur->nom ?? 'Aucun secteur';
-                            return [
-                                $departement->id => $departement->nom . ' (' . $secteurNom . ')'
-                            ];
-                        });
-                    }),
+                Select::make('departement_id')->label('departement')->preload()->relationship('Departement', 'nom')->searchable(),
             
                 Forms\Components\DatePicker::make('datedenaissance')
                     ->label('Date de naissance')
@@ -137,6 +145,8 @@ class EmployeResource extends Resource
                         'Inactif' => 'Inactif',
                     ])
                     ->default('draft')
+                ]),
+                
             ]);
 
     }
