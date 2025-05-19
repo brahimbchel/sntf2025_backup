@@ -20,10 +20,10 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    // }
 
     public static function form(Form $form): Form
     {
