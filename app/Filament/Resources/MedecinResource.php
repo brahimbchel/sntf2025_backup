@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\BaseResource;
 
 class MedecinResource extends Resource
 {
@@ -22,10 +23,15 @@ class MedecinResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    // }
+
+            public static function canViewAny(): bool
+{
+    return auth()->user()?->isAdmin();
+}
 
     public static function form(Form $form): Form
     {

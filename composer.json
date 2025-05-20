@@ -6,13 +6,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "bezhansalleh/filament-shield": "^3.3",
         "filament/filament": "^3.3",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "spatie/laravel-permission": "^6.17",
         "tomatophp/filament-meta": "^1.0"
     },
     "require-dev": {

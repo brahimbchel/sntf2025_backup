@@ -87,10 +87,8 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('4rem')
-            ->unsavedChangesAlerts()
+            ->unsavedChangesAlerts();
 
-            ->plugins([
-                FilamentShieldPlugin::make(),
-            ]);
+           
     }
 }

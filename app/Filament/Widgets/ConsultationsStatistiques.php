@@ -10,10 +10,16 @@ use Illuminate\Support\Facades\Auth;
 
 class ConsultationsStatistiques extends BaseWidget
 {
+    // public static function canView(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    // }
+
     public static function canView(): bool
-    {
-        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
-    }
+{
+    return auth()->user()?->isAdmin();
+}
+
 
     protected static ?int $sort = 10;
 

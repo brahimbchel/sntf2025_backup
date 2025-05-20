@@ -11,8 +11,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\MultiSelect;
+use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\BaseResource;
 
 class UserResource extends Resource
 {
@@ -25,6 +26,18 @@ class UserResource extends Resource
     //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
     // }
 
+public static function canViewAny(): bool
+{
+    return auth()->user()?->isAdmin();
+}
+
+// public static function canAccess(): bool
+// {
+//     $user = auth()->user();
+
+//     return $user && $user->hasRole(['admin']);
+// }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -35,11 +48,14 @@ class UserResource extends Resource
                     ->password()
                     ->dehydrateStateUsing(fn ($state) => !empty($state) ? bcrypt($state) : null)
                     ->required(fn ($livewire) => $livewire instanceof Pages\CreateUser),
-                MultiSelect::make('roles')
-                    ->label('Roles')
-                    ->relationship('roles', 'name')
-                    ->preload()
-                    ->searchable(),
+                Select::make('role')
+                ->label('Rôle')
+                ->options([
+                    'admin' => 'Admin',
+                    'employe' => 'Employé',
+                    'medecin' => 'Médecin',
+                ])
+                ->required(),
             ]);
     }
 

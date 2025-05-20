@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\BaseResource;
 
 class AppareilResource extends Resource
 {
@@ -20,10 +21,19 @@ class AppareilResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    // }
+// public static function canAccess(): bool
+// {
+//     return true;
+// }
+
+public static function canViewAny(): bool
+{
+    return auth()->user()?->isAdmin();
+}
 
     public static function form(Form $form): Form
     {

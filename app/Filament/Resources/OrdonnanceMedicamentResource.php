@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\BaseResource;
 
 class OrdonnanceMedicamentResource extends Resource
 {
@@ -20,10 +21,10 @@ class OrdonnanceMedicamentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->hasAnyRole(['medecin']) ?? false;
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;
+    // }
 
     public static function form(Form $form): Form
     {

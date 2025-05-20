@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\BaseResource;
 
 class SecteurResource extends Resource
 {
@@ -20,9 +21,21 @@ class SecteurResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    // }
+
+        // 🔒 Only admins can see this resource in sidebar
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     return auth()->user()?->isAdmin();
+    // }
+
+    // 🔐 Only admins can access this resource at all
     public static function canViewAny(): bool
     {
-        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+        return auth()->user()?->isAdmin();
     }
 
     public static function form(Form $form): Form

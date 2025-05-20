@@ -15,8 +15,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Medecin;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
+use App\Filament\Resources\BaseResource;
 
-
+use Illuminate\Database\Eloquent\Model;
 
 class ConsultationResource extends Resource
 {
@@ -24,20 +25,35 @@ class ConsultationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
+    public static function canCreate(): bool
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+}
+
+public static function canEdit(Model $record): bool
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+}
+
+public static function canDelete(Model $record): bool
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+}
+
     public static function getEloquentQuery(): Builder
 {
     $query = parent::getEloquentQuery();
     $user = auth()->user();
 
-    if ($user->hasRole('admin') || $user->hasRole('agent')) {
+    if (auth()->user()?->isAdmin()) {
         return $query; // Agents and admins see all consultations
     }
 
-    if ($user->hasRole('medecin')) {
+    if (auth()->user()?->isMedecin()) {
         return $query->where('medecin_id', $user->medecin->id);
     }
 
-    if ($user->hasRole('employe')) {
+    if (auth()->user()?->isEmploye()) {
         return $query->where('dossier_id', $user->employe->dossier_medicals->id ?? 0);
     }
 

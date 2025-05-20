@@ -13,10 +13,16 @@ class ConsultationChart extends LineChartWidget
 
     protected static ?int $sort = 10;
     
+    // public static function canView(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
+    // }
+
     public static function canView(): bool
-    {
-        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
-    }
+{
+    return auth()->user()?->isAdmin();
+}
+
 
     protected function getData(): array
     { 

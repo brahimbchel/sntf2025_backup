@@ -3,7 +3,10 @@
         @php
             $user = auth()->user();
             $name = $user->name ?? 'Utilisateur';
-            $role = $user->getRoleNames()->first() ?? 'Invité';
+
+            $admin = $user->isAdmin();
+            $medecin = $user->isMedecin();
+            $employe = $user->isEmploye();
         @endphp
 
         <div class="text-center space-y-4">
@@ -11,15 +14,15 @@
                 Bonjour {{ $name }}, bienvenue 👋
             </h2>
 
-            @if ($role === 'admin' || $role === 'Super Admin' || $role === 'admin-agent')
+            @if ($admin)
                 <p class="text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto">
                     Vous êtes connecté en tant qu’administrateur. Vous pouvez gérer les utilisateurs, les dossiers médicaux, les statistiques, et superviser l’ensemble de la plateforme. Utilisez les outils du tableau de bord pour garder le contrôle total sur le système.
                 </p>
-            @elseif ($role === 'medecin')
+            @elseif ($medecin)
                 <p class="text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto">
                     Vous êtes connecté en tant que médecin. Depuis ce tableau de bord, vous pouvez consulter vos rendez-vous, accéder aux dossiers médicaux de vos patients et suivre vos statistiques de consultation.
                 </p>
-            @elseif ($role === 'agent' || $role === 'employe')
+            @elseif ($employe)
                 <p class="text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto">
                     Vous êtes connecté en tant qu’agent de centre médical. Utilisez ce tableau pour organiser les dossiers, planifier les rendez-vous et assister les médecins dans leur travail quotidien.
                 </p>

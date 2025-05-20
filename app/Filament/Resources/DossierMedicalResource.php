@@ -16,6 +16,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\MarkdownEditor;
+use App\Filament\Resources\BaseResource;
 
 
 class DossierMedicalResource extends Resource
@@ -28,8 +29,8 @@ class DossierMedicalResource extends Resource
     {
         $user = auth()->user();
 
-        // If the user is admin, show everything
-        if ($user->hasRole('admin') || $user->hasRole('Super Admin') || $user->hasRole('admin-agent')) {
+        // If the user is admin or medecin, show everything
+        if ($user->isAdmin() || $user->isMedecin()) {
             return parent::getEloquentQuery();
         }
 

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\BaseResource;
 
 class DepartementResource extends Resource
 {
@@ -21,10 +22,15 @@ class DepartementResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-home';
 
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasRole('admin') ?? false;
+    // }
+
     public static function canViewAny(): bool
-    {
-        return Auth::user()?->hasRole('admin') ?? false;
-    }
+{
+    return auth()->user()?->isAdmin();
+}
 
     public static function form(Form $form): Form
     {
