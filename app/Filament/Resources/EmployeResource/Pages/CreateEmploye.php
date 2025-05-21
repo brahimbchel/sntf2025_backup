@@ -25,7 +25,8 @@ class CreateEmploye extends CreateRecord
             'name' => $data['user']['name'] ?? "null",
         ]);
 
-        $user->assignRole('employe');
+        // $user->assignRole('employe');
+        $user->role = 'employe';
 
          // Remove 'user' subarray from employe data
         unset($data['user']);

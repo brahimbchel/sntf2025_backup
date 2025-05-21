@@ -74,7 +74,7 @@ class MedecinResource extends Resource
                         ->email()
                         ->maxLength(50),
 
-                    Select::make('Specialite')->label('Specialite')->relationship('Specialite', 'nom')->preload()->searchable(),
+                    Select::make('Specialite')->label('Specialite')->relationship('Specialite', 'nom')->preload()->searchable()->required(),
                     Select::make('CentreMedical_id')->label('CMS')->relationship('Centre_Medical', 'nom')->preload()->searchable(),
                 
                     Select::make('gender')

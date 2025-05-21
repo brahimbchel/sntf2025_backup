@@ -26,7 +26,8 @@ class CreateMedecin extends CreateRecord
         ]);
 
         // Assign 'medecin' role
-        $user->assignRole('medecin');
+        // $user->assignRole('medecin');
+        $user->role = 'medecin';
 
          // Remove 'user' subarray from employe data
         unset($data['user']);

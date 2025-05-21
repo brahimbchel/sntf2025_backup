@@ -21,7 +21,7 @@ class ConsultationsStatistiques extends BaseWidget
 }
 
 
-    protected static ?int $sort = 10;
+    protected static ?int $sort = 2;
 
     protected function getCards(): array
     {

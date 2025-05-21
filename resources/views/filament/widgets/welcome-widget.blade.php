@@ -14,7 +14,7 @@
                 Bonjour {{ $name }}, bienvenue 👋
             </h2>
 
-            @if ($admin)
+            <!-- @if ($admin)
                 <p class="text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto">
                     Vous êtes connecté en tant qu’administrateur. Vous pouvez gérer les utilisateurs, les dossiers médicaux, les statistiques, et superviser l’ensemble de la plateforme. Utilisez les outils du tableau de bord pour garder le contrôle total sur le système.
                 </p>
@@ -30,7 +30,7 @@
                 <p class="text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto">
                     Bienvenue sur la plateforme de gestion médicale. Si vous avez besoin d’assistance ou de formation, veuillez contacter votre administrateur.
                 </p>
-            @endif
+            @endif -->
 
             <p class="text-gray-500 dark:text-gray-400 text-xs">
                 Merci d’utiliser notre application. Ensemble, améliorons la gestion des soins médicaux.

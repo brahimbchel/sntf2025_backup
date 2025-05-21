@@ -24,7 +24,7 @@ class MedecinsBySpecialiteChart extends PieChartWidget
 
 
 
-    protected static ?int $sort = 10;
+    protected static ?int $sort = 4;
 
     protected function getData(): array
     {
