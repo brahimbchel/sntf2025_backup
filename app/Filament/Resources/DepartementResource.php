@@ -22,6 +22,16 @@ class DepartementResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-home';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Centers';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 3;
+}
+
     // public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasRole('admin') ?? false;

@@ -7,6 +7,18 @@ use Illuminate\Http\Request;
 
 class EmployeController extends Controller
 {
+
+    public function getEmployeByUserId($userId)
+{
+    $employe = Employe::where('user_id', $userId)->first();
+
+    if (!$employe) {
+        return response()->json(['message' => 'Employé not found'], 404);
+    }
+
+    return response()->json($employe);
+}
+
     /**
      * Display a listing of the resource.
      */

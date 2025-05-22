@@ -21,6 +21,16 @@ class MedicamentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-adjustments-vertical';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Medical Management';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 3;
+}
+
     //    public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;

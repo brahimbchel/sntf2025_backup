@@ -21,6 +21,16 @@ class AppareilResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Centers';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 4;
+}
+
     // public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;

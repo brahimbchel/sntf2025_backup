@@ -25,6 +25,16 @@ class ConsultationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
+    public static function getNavigationGroup(): ?string
+{
+    return 'Medical Management';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 2;
+}
+
     public static function canCreate(): bool
 {
     return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();

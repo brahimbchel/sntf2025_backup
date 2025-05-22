@@ -39,6 +39,9 @@ Route::apiResource('secteur', SecteurController::class);
 
 Route::apiResource('employes', EmployeController::class);
 
+Route::get('/employe/by-user/{userId}', [EmployeController::class, 'getEmployeByUserId']);
+
+
 Route::apiResource('centres-medicaux', CentreMedicalController::class);
 
 Route::apiResource('specialite', SpecialiteController::class);

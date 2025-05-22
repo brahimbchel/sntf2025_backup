@@ -11,7 +11,7 @@ class MedecinConsultationChart extends LineChartWidget
 {
     protected static ?string $heading = 'Mes consultations par mois';
 
-    protected static ?int $sort = 10;
+    protected static ?int $sort = 3;
     
     // public static function canView(): bool
     // {

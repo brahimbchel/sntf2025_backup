@@ -21,6 +21,16 @@ class OrdonnanceMedicamentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Medical Management';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 5;
+}
+
     // public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;
