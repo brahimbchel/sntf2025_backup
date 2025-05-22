@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\BaseResource;
 
 class RubriqueResource extends Resource
 {
@@ -20,10 +21,16 @@ class RubriqueResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    // }
+
     public static function canViewAny(): bool
-    {
-        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
-    }
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+}
+
 
     public static function form(Form $form): Form
     {

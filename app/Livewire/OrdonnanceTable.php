@@ -26,7 +26,6 @@ class OrdonnanceTable extends Component implements Tables\Contracts\HasTable
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('recommandations')->label('Nom de l’ordonnance'),
-                Tables\Columns\TextColumn::make('date_ordonnance')->label('Date de création')->date(),
             ])
             ->filters([/* Ajoutez des filtres ici */])
             ->headerActions([

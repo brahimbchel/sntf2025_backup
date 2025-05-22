@@ -16,7 +16,6 @@ class OrdonnanceRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                // Forms\Components\DatePicker::make('date_ordonnance'),
                 Forms\Components\Textarea::make('recommandations')
                     ->columnSpanFull(),
             ]);

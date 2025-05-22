@@ -60,7 +60,6 @@ class OrdonanceController extends Controller
     {
         $validated = $request->validate([
             'consultation_id' => 'required|exists:consultation,id',
-            'date_ordonnance' => 'required|date',
             'recommandations' => 'nullable|string',
             'medicaments' => 'required|array', // Array of meds with dosage & durée
             'medicaments.*.id' => 'required|exists:medicament,id',
@@ -101,7 +100,6 @@ class OrdonanceController extends Controller
 
         $validated = $request->validate([
             'consultation_id' => 'sometimes|exists:consultation,id',
-            'date_ordonnance' => 'sometimes|date',
             'recommandations' => 'nullable|string',
             'medicaments' => 'nullable|array',
             'medicaments.*.id' => 'required_with:medicaments|exists:medicament,id',

@@ -18,7 +18,10 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Support\Enums\ActionSize;
+use Illuminate\Support\Facades\Auth;
+use App\Filament\Resources\BaseResource;
 
+use Illuminate\Database\Eloquent\Model;
 
 class EmployeResource extends Resource
 {
@@ -26,21 +29,42 @@ class EmployeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
-        public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
-        $user = auth()->user();
+        public static function canViewAny(): bool
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isEmploye();
+}
 
-        if ($user->hasRole('admin') || $user->hasRole('agent')) {
-            return $query; // Agents and admins see all consultations
-        }
 
-        if ($user->hasRole('employe')) {
-            return $query->where('id', $user->employe->id ?? 0);
-        }
+    public static function canCreate(): bool
+{
+    return auth()->user()?->isAdmin();
+}
 
-        return $query; // Fallback for other roles like medecin in this case
+public static function canEdit(Model $record): bool
+{
+    return auth()->user()?->isAdmin();
+}
+
+public static function canDelete(Model $record): bool
+{
+    return auth()->user()?->isAdmin();
+}
+
+    public static function getEloquentQuery(): Builder
+{
+    $query = parent::getEloquentQuery();
+    $user = auth()->user();
+
+    if (auth()->user()?->isAdmin()) {
+        return $query; // Agents and admins see all consultations
     }
+
+    if (auth()->user()?->isEmploye()) {
+        return $query->where('id', $user->employe->id ?? 0);
+    }
+
+    return $query; // Fallback for other roles
+}
 
     public static function form(Form $form): Form
     {

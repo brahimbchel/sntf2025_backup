@@ -10,10 +10,16 @@ use Carbon\Carbon;
 
 class MedecinConsultationsStatistiques extends BaseWidget
 {
+    // public static function canView(): bool
+    // {
+    //     return Auth::check() && Auth::user()->hasRole('medecin');
+    // }
+
     public static function canView(): bool
-    {
-        return Auth::check() && Auth::user()->hasRole('medecin');
-    }
+{
+    return auth()->user()?->isMedecin();
+}
+
 
     protected static ?int $sort = 10;
 

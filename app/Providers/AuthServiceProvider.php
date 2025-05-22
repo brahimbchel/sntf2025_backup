@@ -9,11 +9,9 @@ use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    
-
-    protected $policies = [
-        \App\Models\User::class => \App\Policies\UserPolicy::class,
-    ];
+    // protected $policies = [
+    //     \App\Models\User::class => \App\Policies\UserPolicy::class,
+    // ];
 
     public function boot(): void
     {
@@ -35,6 +33,8 @@ class AuthServiceProvider extends ServiceProvider
             'Employe', 'employe',
             'Medecin',
         ]));
+
+        Gate::define('access-filament', fn ($user) => $user->isAdmin() || $user->isMedecin() || $user->isEmploye());
 
         // Optional: restrict to only users with a specific role
         // Gate::define('access-filament', fn ($user) => $user->hasRole('Super Admin'));

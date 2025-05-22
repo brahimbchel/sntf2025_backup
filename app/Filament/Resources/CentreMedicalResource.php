@@ -16,14 +16,19 @@ use Illuminate\Support\Facades\Auth;
 
 class CentreMedicalResource extends Resource
 {
+    public static function canViewAny(): bool
+{
+    return auth()->user()?->isAdmin();
+}
+
     protected static ?string $model = CentreMedical::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
-    public static function canViewAny(): bool
-    {
-        return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
+    // }
 
     public static function form(Form $form): Form
     {
