@@ -21,6 +21,16 @@ class ExplorationComplementaireResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-light-bulb';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Medical Management';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 7;
+}
+
     //     public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;

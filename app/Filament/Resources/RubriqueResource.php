@@ -21,6 +21,16 @@ class RubriqueResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+            public static function getNavigationGroup(): ?string
+{
+    return 'Centers';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 5;
+}
+
     // public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
@@ -28,7 +38,7 @@ class RubriqueResource extends Resource
 
     public static function canViewAny(): bool
 {
-    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+    return auth()->user()?->isAdmin();
 }
 
 

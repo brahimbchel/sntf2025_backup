@@ -16,6 +16,16 @@ use Illuminate\Support\Facades\Auth;
 
 class CentreMedicalResource extends Resource
 {
+    public static function getNavigationGroup(): ?string
+{
+    return 'Centers';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 1;
+}
+
     public static function canViewAny(): bool
 {
     return auth()->user()?->isAdmin();

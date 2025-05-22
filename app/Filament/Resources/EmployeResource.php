@@ -29,6 +29,16 @@ class EmployeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Staff & Users';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 2; // lower = higher in group list
+}
+
         public static function canViewAny(): bool
 {
     return auth()->user()?->isAdmin() || auth()->user()?->isEmploye();

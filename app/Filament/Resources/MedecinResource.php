@@ -23,6 +23,16 @@ class MedecinResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Staff & Users';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 3; // lower = higher in group list
+}
+
     // public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;

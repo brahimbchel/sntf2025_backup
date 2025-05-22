@@ -21,6 +21,16 @@ class SpecialiteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Centers';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 6;
+}
+
     // public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;

@@ -20,6 +20,16 @@ class ResultatResource extends Resource
     protected static ?string $model = Resultat::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
+    
+        public static function getNavigationGroup(): ?string
+{
+    return 'Medical Management';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 8;
+}
 
     // // this is the corect one
     //  ublic static function canViewAny(): bool
@@ -33,10 +43,6 @@ class ResultatResource extends Resource
     //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
     // }
 
-            public static function canViewAny(): bool
-{
-    return auth()->user()?->isMedecin();
-}
 
     public static function form(Form $form): Form
     {

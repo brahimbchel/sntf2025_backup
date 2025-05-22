@@ -21,6 +21,16 @@ class SecteurResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
+        public static function getNavigationGroup(): ?string
+{
+    return 'Centers';
+}
+
+public static function getNavigationSort(): ?int
+{
+    return 2;
+}
+
     // public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent']) ?? false;
