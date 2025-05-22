@@ -121,8 +121,6 @@ public static function canDelete(Model $record): bool
                 ->displayFormat('d/m/Y')
                 ->label('Date de Rendez-Vous')
                 ->minDate(now()->addDay()->startOfDay()),
-                // ->minDate(now()->addDay(1)),
-
             // Forms\Components\Textarea::make('diagnostic')
             //     ->columnSpanFull(),
             ]);

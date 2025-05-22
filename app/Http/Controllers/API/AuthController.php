@@ -27,7 +27,7 @@ class AuthController extends Controller
         }
 
         // 🔐 Only allow users with 'employe' role
-        if (! $user->isEmploye()) { 
+        if (! $user->isEmploye()) {
             return response()->json([
                 'message' => 'Access denied. Only employe users are allowed.'
             ], 403);

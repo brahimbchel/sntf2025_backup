@@ -50,11 +50,21 @@ class ViewConsultation extends ViewRecord
                                 ->label('Diagnostic'),
                             // Add more fields as necessary
                         ]),
-                    Tabs\Tab::make('Ordonnances')
-                        ->schema([
-                            // Use a table or list to display ordonnances
-                            // Example: Tables\Components\Table::make('ordonnances')
-                        ]),
+                     Tabs\Tab::make('Ordonnances')
+                    ->schema([
+                        Table::make('ordonnances')
+                            ->columns([
+                                TextColumn::make('medicaments.nom')
+                                    ->label('Nom du Médicament'),
+                                TextColumn::make('medicaments.dosage')
+                                    ->label('Dosage'),
+                                TextColumn::make('medicaments.duree')
+                                    ->label('Durée'),
+                            ])
+                            ->relationship('ordonnances.medicaments'),
+                    ]),
+                // Autres onglets, si nécessaire
+            ]),
                     Tabs\Tab::make('Explorations Fonctionnelles')
                         ->schema([
                             // Use a table or list to display explorations fonctionnelles
@@ -63,7 +73,6 @@ class ViewConsultation extends ViewRecord
                         ->schema([
                             // Use a table or list to display explorations complémentaires
                         ]),
-                ]),
         ];
     }
 }

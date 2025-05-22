@@ -32,7 +32,6 @@ class OrdonnanceResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('consultation_id')
                     ->numeric(),
-                Forms\Components\DatePicker::make('date_ordonnance'),
                 Forms\Components\Textarea::make('recommandations')
                     ->columnSpanFull(),
             ]);
@@ -44,9 +43,6 @@ class OrdonnanceResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('consultation_id')
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('date_ordonnance')
-                    ->date()
                     ->sortable(),
             ])
             ->filters([

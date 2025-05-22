@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property int|null $consultation_id
- * @property Carbon|null $date_ordonnance
  * @property string|null $recommandations
  * 
  * @property Consultation|null $consultation
@@ -30,18 +29,21 @@ class Ordonnance extends Model
 
 	protected $casts = [
 		'consultation_id' => 'int',
-		'date_ordonnance' => 'datetime'
 	];
 
 	protected $fillable = [
 		'consultation_id',
-		'date_ordonnance',
 		'recommandations'
 	];
 
 	public function consultation()
 	{
 		return $this->belongsTo(Consultation::class);
+	}
+
+	public function ordonnance_medicaments()
+	{
+   		return $this->hasMany(\App\Models\OrdonnanceMedicament::class);
 	}
 
 	public function medicaments()

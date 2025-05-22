@@ -17,8 +17,11 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+<<<<<<< HEAD
 // use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 
+=======
+>>>>>>> 8bbcb97 (update for dossier medical: ajout de ordonnances section)
 class AdminPanelProvider extends PanelProvider
 {
     // Get the home URL based on the user's role

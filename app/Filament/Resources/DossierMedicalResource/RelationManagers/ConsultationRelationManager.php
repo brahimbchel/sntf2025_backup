@@ -3,10 +3,14 @@ namespace App\Filament\Resources\DossierMedicalResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Repeater;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Resources\DossierMedicalResource\RelationManagers\ExplorationFonctionnelleRelationManager;
 use App\Filament\Resources\DossierMedicalResource\RelationManagers\ExplorationComplementaireRelationManager;
 use App\Filament\Resources\DossierMedicalResource\RelationManagers\OrdonnanceRelationManager;
+use App\Models\Medicament;
 use Filament\Tables;
 use Livewire\Livewire;
 use Filament\Tables\Table;
@@ -48,7 +52,6 @@ class ConsultationRelationManager extends RelationManager
                             Forms\Components\Textarea::make('FRSP')->label('Fonction Respiratoire'),
                             Forms\Components\Textarea::make('FCIR')->label('Fonction Circulaires'),
                             Forms\Components\Textarea::make('FMOT')->label('Fonction Motricitr '),
-                            Forms\Components\DatePicker::make('date_exploration')->label('Date Exploration'),
                         ])
                         ->columns(1),
                 ]),
@@ -60,22 +63,48 @@ class ConsultationRelationManager extends RelationManager
                         ->schema([
                             Forms\Components\Textarea::make('toxic')->label('toxicologique'),
                             Forms\Components\Textarea::make('bio')->label('biologique'),
-                            Forms\Components\Textarea::make('radio')->label('radiologique'),                            Forms\Components\Textarea::make('recommandations')->label('Recommandations'),
+                            Forms\Components\Textarea::make('radio')->label('radiologique'),
                         ])
                         ->columns(1),
                 ]),
 
-                    Forms\Components\Section::make('Ordonnances')
-                ->schema([
+                Forms\Components\Section::make('Ordonnances')
+    ->schema([
                     Forms\Components\Repeater::make('ordonnances')
                         ->relationship('ordonnances')
                         ->schema([
-                            Forms\Components\DatePicker::make('date_ordonnance')->label('Date Ordonnance'),
-                            Forms\Components\Textarea::make('recommandations')->label('Recommandations'),
-                        ])
-                        ->columns(1),
-                ]),
+                    Forms\Components\Textarea::make('recommandations')->label('Recommandations'),
 
+                         Repeater::make('ordonnance_medicaments')
+                            ->relationship('ordonnance_medicaments')
+                            ->schema([
+                            Select::make('medicament_id')
+                            ->relationship('medicament', 'nom')
+                            ->label('Médicament')
+                            ->options(Medicament::all()->pluck('nom', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->createOptionForm([
+                                TextInput::make('nom')->required(),
+                                TextInput::make('description'),
+                            ])
+                            ->createOptionUsing(fn (array $data) => Medicament::create($data)),
+         
+                    Forms\Components\TextInput::make('dosage')
+                        ->label('Dosage')
+                        ->required(),
+                                
+                        Forms\Components\TextInput::make('duree')
+                        ->label('Durée')
+                        ->required(),
+                        ])
+                        ->columns(3)
+                        ->defaultItems(1),
+
+        ])
+        ->columns(1),
+
+        ])
         ]);
 }
 
@@ -111,6 +140,15 @@ class ConsultationRelationManager extends RelationManager
                 ->label('specialité')
                 ->sortable()
                 ->searchable(),
+            Tables\Columns\BadgeColumn::make('aptitude')
+                ->label('Aptitude')
+                ->colors([
+                    'success' => 'apte',
+                    'danger' => 'inapte',
+                    'warning' => 'inapte définitif',
+                    'gray' => 'apte avec reserve',
+                ]),
+
             Tables\Columns\TextColumn::make('date_consultation')
                 ->label('Date')
                 ->date()
