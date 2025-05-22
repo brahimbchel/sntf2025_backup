@@ -36,14 +36,24 @@ public static function getNavigationSort(): ?int
     //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;
     // }
 
+            public static function canViewAny(): bool
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+}
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('ordonnance_id')
                     ->numeric(),
-                Forms\Components\TextInput::make('medicament_id')
-                    ->numeric(),
+                // Forms\Components\TextInput::make('medicament_id')
+                //     ->numeric(),
+                Forms\Components\Select::make('medicament_id')
+                    ->label('Médicament')
+                    ->relationship('medicament', 'nom') // assuming 'nom' is the name column in medicaments table
+                    ->searchable()
+                    ->required(),
                 Forms\Components\TextInput::make('dosage')
                     ->maxLength(100),
                 Forms\Components\TextInput::make('duree')

@@ -36,6 +36,11 @@ public static function getNavigationSort(): ?int
     //     return Auth::user()?->hasAnyRole([ 'medecin']) ?? false;
     // }
 
+                public static function canViewAny(): bool
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+}
+
     public static function form(Form $form): Form
     {
         return $form
@@ -51,9 +56,10 @@ public static function getNavigationSort(): ?int
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('consultation_id')
-                    ->numeric()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('consultation_id'),
+                Tables\Columns\TextColumn::make('consultation.dossier_medical.employe.nom')
+                    ->label('Employé'),
+                Tables\Columns\TextColumn::make('recommandations'),
             ])
             ->filters([
                 //

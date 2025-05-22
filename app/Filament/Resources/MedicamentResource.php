@@ -36,9 +36,9 @@ public static function getNavigationSort(): ?int
     //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;
     // }
 
-        public static function canViewAny(): bool
+            public static function canViewAny(): bool
 {
-    return auth()->user()?->isMedecin();
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
 }
 
     public static function form(Form $form): Form

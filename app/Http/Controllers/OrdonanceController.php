@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class OrdonanceController extends Controller
 {
+// Illuminate\Database\QueryException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'employe_id' in 'where clause' (Connection: mysql, SQL: select * from `dossier_medical` where `employe_id` = 5 limit 1) in file C:\laragon\www\sntf2025\vendor\laravel\framework\src\Illuminate\Database\Connection.php on line 829
 
     public function getOrdonnancesWithMedicaments($employeId)
 {
@@ -18,7 +19,7 @@ class OrdonanceController extends Controller
         return response()->json(['message' => 'Employé non trouvé'], 404);
     }
 
-    $dossier = DossierMedical::where('employe_id', $employeId)->first();
+    $dossier = DossierMedical::where('emp_id', $employeId)->first();
 
     if (!$dossier) {
         return response()->json(['message' => 'Dossier médical non trouvé'], 404);
@@ -192,8 +193,4 @@ class OrdonanceController extends Controller
 
         return response()->json(['message' => 'Ordonnance deleted']);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> bm_dani

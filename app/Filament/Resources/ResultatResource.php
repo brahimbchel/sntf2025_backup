@@ -31,6 +31,11 @@ public static function getNavigationSort(): ?int
     return 8;
 }
 
+            public static function canViewAny(): bool
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+}
+
     // // this is the corect one
     //  ublic static function canViewAny(): bool
     // {

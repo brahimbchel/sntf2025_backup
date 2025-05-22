@@ -23,7 +23,7 @@ class StatsOverview extends BaseWidget
 }
 
 
-    protected static ?int $sort = 10;
+    protected static ?int $sort = 3;
 
     protected function getCards(): array
     {

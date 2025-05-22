@@ -41,7 +41,7 @@ public static function getNavigationSort(): ?int
 
         public static function canViewAny(): bool
 {
-    return auth()->user()?->isAdmin() || auth()->user()?->isEmploye();
+    return auth()->user()?->isAdmin();
 }
 
 

@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class EmployeProfile extends Page
 {
+    public static function canViewAny(): bool
+{
+    return auth()->user()?->isEmploye();
+}
+
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
     protected static string $view = 'filament.pages.employe-profile2';
 
