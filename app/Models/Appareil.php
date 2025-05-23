@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -14,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property string $nom
+ * @property string|null $examenClinique
  * 
  * @property Collection|Rubrique[] $rubriques
  *
@@ -21,24 +18,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Appareil extends Model
 {
-	protected $table = 'appareil';
-	public $timestamps = false;
+    protected $table = 'appareil';
+    public $timestamps = false;
 
-	protected $fillable = [
-		'nom',
-		// 'interrogatoire',
-		// 'examenClinique'
-	];
+    protected $fillable = [
+        'nom',
+        'examenClinique',
+    ];
 
-	public function rubriques()
-	{
-		return $this->hasMany(Rubrique::class, 'App_id');
-	}
-
-	
-
-	public function consultation()
-	{
-		return $this->belongsTo(Consultation::class, 'consultation_id');
-	}
+    public function rubriques()
+    {
+        return $this->hasMany(Rubrique::class, 'App_id');
+    }
 }

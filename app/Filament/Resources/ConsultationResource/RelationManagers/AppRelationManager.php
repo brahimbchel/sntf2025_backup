@@ -25,10 +25,6 @@ class AppRelationManager extends RelationManager
                     ->preload()
                     ->required(),
 
-                Forms\Components\DatePicker::make('dateR')
-                    ->label('Date du Résultat')
-                    ->required(),
-
                 Forms\Components\TextInput::make('resultat')
                     ->label('Résultat')
                     ->maxLength(100)

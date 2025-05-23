@@ -84,8 +84,8 @@ class AdminPanelProvider extends PanelProvider
                 'success' => Color::Green,     
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->brandLogo(asset('images/sntf2.png'))
-            ->brandLogoHeight('5rem')
+            ->brandLogo(asset('images/logo.png'))
+            ->brandLogoHeight('4rem')
             ->unsavedChangesAlerts();
 
            

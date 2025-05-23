@@ -1,12 +1,7 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $rubrique_id
  * @property int $consultation_id
- * @property Carbon $dateR
  * @property string|null $resultat
  * 
  * @property Rubrique $rubrique
@@ -24,30 +18,27 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Resultat extends Model
 {
-	protected $table = 'resultat';
-	public $incrementing = false;
-	public $timestamps = false;
+    protected $table = 'resultat';
+    public $timestamps = true;
 
-	protected $casts = [
-		'rubrique_id' => 'int',
-		'consultation_id' => 'int',
-		'dateR' => 'datetime'
-	];
+    protected $casts = [
+        'rubrique_id' => 'int',
+        'consultation_id' => 'int',
+    ];
 
-	protected $fillable = [
-		'resultat',
-		'rubrique_id',
-		'consultation_id',
-		'dateR'
-	];
+    protected $fillable = [
+        'resultat',
+        'rubrique_id',
+        'consultation_id',
+    ];
 
-	public function rubrique()
-	{
-		return $this->belongsTo(Rubrique::class);
-	}
+    public function rubrique()
+    {
+        return $this->belongsTo(Rubrique::class, 'rubrique_id'); // Relation correcte avec Rubrique
+    }
 
-	public function consultation()
-	{
-		return $this->belongsTo(Consultation::class);
-	}
+    public function consultation()
+    {
+        return $this->belongsTo(Consultation::class, 'consultation_id'); // Relation correcte avec Consultation
+    }
 }

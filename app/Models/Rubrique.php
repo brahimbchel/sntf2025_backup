@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -18,33 +14,31 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool|null $visible
  * 
  * @property Appareil|null $appareil
- * @property Collection|Resultat[] $resultats
+ * @property Resultat|null $resultat
  *
  * @package App\Models
  */
 class Rubrique extends Model
 {
-	protected $table = 'rubrique';
-	public $timestamps = false;
+    protected $table = 'rubrique';
+    public $timestamps = false;
 
-	protected $casts = [
-		'App_id' => 'int',
-		'visible' => 'bool'
-	];
+    protected $casts = [
+        'App_id' => 'int',
+    ];
 
-	protected $fillable = [
-		'App_id',
-		'titre',
-		'visible'
-	];
+    protected $fillable = [
+        'App_id',
+        'titre',
+    ];
 
-	public function appareil()
-	{
-		return $this->belongsTo(Appareil::class, 'App_id');
-	}
+    public function appareil()
+    {
+        return $this->belongsTo(Appareil::class, 'App_id'); // Relation correcte avec Appareil
+    }
 
-	public function resultats()
-	{
-		return $this->hasMany(Resultat::class);
-	}
+    public function resultat()
+{
+    return $this->hasOne(Resultat::class, 'rubrique_id'); // à adapter selon ta base
+}
 }
