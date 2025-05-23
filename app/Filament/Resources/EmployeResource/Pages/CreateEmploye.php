@@ -14,26 +14,24 @@ class CreateEmploye extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        if (!isset($data['user']['email'], $data['user']['password'])) {
-            throw new \Exception("User email or password is missing.");
-        }
-
-         // Create user first
+        // Créer l'utilisateur
         $user = User::create([
             'email' => $data['user']['email'],
             'password' => Hash::make($data['user']['password']),
-            'name' => $data['user']['name'] ?? "null",
+            'name' => $data['nom'] . ' ' . $data['prenom'],
+            'role' => 'employe',
         ]);
+
+        // Associer user_id à l'employé
+        $data['user_id'] = $user->id;
 
         // $user->assignRole('employe');
         $user->role = 'employe';
 
-         // Remove 'user' subarray from employe data
+        // Supprimer les champs inutiles
         unset($data['user']);
 
-        // Link user to employe
-        $data['user_id'] = $user->id;
-
         return $data;
-    }  
+    }
+    
 }

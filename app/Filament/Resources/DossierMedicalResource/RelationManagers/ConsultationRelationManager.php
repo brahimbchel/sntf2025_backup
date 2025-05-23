@@ -53,15 +53,13 @@ class ConsultationRelationManager extends RelationManager
 
             Section::make('Interrogatoires')->schema([
                 Repeater::make('rubriques')
-    ->relationship('rubriques', function ($query) {
-        $query->with('resultat'); // Ensure the 'resultat' relationship is loaded
-    })
+    ->relationship('rubriques')
     ->schema([
         TextInput::make('titre')
             ->label('Nom de la Rubrique')
             ->required(),
 
-        TextInput::make('resultat.resultat') // Accessing the 'resultat' relationship
+        TextInput::make('resultat') // Accessing the 'resultat' relationship
             ->label('Résultat')
             ->required()
             ->maxLength(100),

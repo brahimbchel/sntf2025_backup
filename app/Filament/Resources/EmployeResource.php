@@ -77,113 +77,122 @@ public static function canDelete(Model $record): bool
 }
 
     public static function form(Form $form): Form
-    {
-            return $form
-            ->schema([
-                Forms\Components\Section::make('User Information')
+{
+    return $form
+        ->schema([
+            Forms\Components\Section::make('Informations de l\'employé')
+                ->columns(2)
                 ->schema([
+                    // Champs liés à l'utilisateur
                     Forms\Components\TextInput::make('user.email')
                         ->label('Email')
                         ->email()
                         ->required()
                         ->unique(User::class, 'email'),
 
-                    Forms\Components\TextInput::make('user.name')->required(),
-
                     Forms\Components\TextInput::make('user.password')
-                        ->label('Password')
+                        ->label('Mot de passe')
                         ->password()
                         ->required()
                         ->minLength(6),
-                        // ->dehydrated(fn ($state) => filled($state)),
-                        // ->dehydrated(false), // Don't save to Employe model
-                ]),
-                Forms\Components\Section::make('Employe Information')
-                ->schema([
+
+                    // Champs de l'employé
                     Forms\Components\TextInput::make('nom')
-                    ->required()
-                    ->label('Nom')
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('prenom')
-                    ->required()
-                    ->label('Prénom')
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('matricule')
-                    ->required()
-                    ->label('Matricule')
-                    ->maxLength(100),
+                        ->required()
+                        ->label('Nom')
+                        ->maxLength(100),
 
-                Forms\Components\TextInput::make('fonction')
-                    ->maxLength(100),
-             
-                Select::make('departement_id')->label('departement')->preload()->relationship('Departement', 'nom')->searchable(),
-            
-                Forms\Components\DatePicker::make('datedenaissance')
-                    ->label('Date de naissance')
-                    ->native(false)
-                    ->displayFormat('d/m/Y'),
-                
-                Select::make('gender')
-                    ->options([
-                        'Homme' => 'Homme',
-                        'Femme' => 'Femme',
-                    ])
-                    ->required(),
+                    Forms\Components\TextInput::make('prenom')
+                        ->required()
+                        ->label('Prénom')
+                        ->maxLength(100),
 
-                Forms\Components\TextInput::make('adresse')
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('tel')
-                    ->label('Numéro de téléphone')
-                    ->required()
-                    ->telRegex('/^(05|06|07)[0-9]{8}$/')
-                    ->tel(),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->label('E-mail')
-                    ->maxLength(50),
+                    Forms\Components\TextInput::make('matricule')
+                        ->required()
+                        ->label('Matricule')
+                        ->maxLength(100),
 
-                Select::make('groupe_sanguin')
-                    ->label('Groupe sanguin')
-                    ->options([
-                        'A+' => 'A+',
-                        'A-' => 'A-',
-                        'B+' => 'B+',
-                        'B-' => 'B-',
-                        'AB+' => 'AB+',
-                        'AB-' => 'AB-',
-                        'O+' => 'O+',
-                        'O-' => 'O-',
-                    ]),
+                    Forms\Components\TextInput::make('fonction')
+                        ->label('Fonction')
+                        ->maxLength(100),
 
-                Select::make('situation_familiale')
-                    ->label('Situation familiale')
-                    ->options([
-                        'célibataire' => 'Célibataire',
-                        'marié(e)' => 'Marié(e)',
-                        'divorcé(e)' => 'Divorcé(e)',
-                        'veuf(ve)' => 'Veuf(ve)',
-                    ]),      
+                    Select::make('departement_id')
+                    ->label('Département')
+                    ->searchable()
+                    ->preload()
+                    ->options(function () {
+                        return \App\Models\Departement::with('secteur')->get()->mapWithKeys(function ($departement) {
+                            $secteurNom = $departement->secteur->nom ?? 'Aucun secteur';
+                            return [
+                                $departement->id => $departement->nom . ' (' . $secteurNom . ')'
+                            ];
+                        });
+                    }),
 
-                Select::make('service_national')
-                    ->label('Service national')
-                    ->options([
-                        'accompli' => 'Accompli',
-                        'dispensé' => 'Dispensé',
-                        'inapte' => 'Inapte',
-                    ]),
+                    Forms\Components\DatePicker::make('datedenaissance')
+                        ->label('Date de naissance')
+                        ->native(false)
+                        ->displayFormat('d/m/Y'),
 
-                Select::make('etat')
-                    ->options([
-                        'Actif' => 'Actif',
-                        'Inactif' => 'Inactif',
-                    ])
-                    ->default('draft')
+                    Forms\Components\TextInput::make('adresse')
+                        ->label('Adresse')
+                        ->maxLength(100),
+
+                    Forms\Components\TextInput::make('tel')
+                        ->label('Téléphone')
+                        ->tel()
+                        ->required()
+                        ->telRegex('/^(05|06|07)[0-9]{8}$/'),
+
+                    Select::make('gender')
+                        ->label('Genre')
+                        ->options([
+                            'Homme' => 'Homme',
+                            'Femme' => 'Femme',
+                        ])
+                        ->required(),
+
+                    Select::make('groupe_sanguin')
+                        ->label('Groupe sanguin')
+                        ->options([
+                            'A+' => 'A+',
+                            'A-' => 'A-',
+                            'B+' => 'B+',
+                            'B-' => 'B-',
+                            'AB+' => 'AB+',
+                            'AB-' => 'AB-',
+                            'O+' => 'O+',
+                            'O-' => 'O-',
+                        ]),
+
+                    Select::make('situation_familiale')
+                        ->label('Situation familiale')
+                        ->options([
+                            'célibataire' => 'Célibataire',
+                            'marié(e)' => 'Marié(e)',
+                            'divorcé(e)' => 'Divorcé(e)',
+                            'veuf(ve)' => 'Veuf(ve)',
+                        ]),
+
+                    Select::make('service_national')
+                        ->label('Service national')
+                        ->options([
+                            'accompli' => 'Accompli',
+                            'dispensé' => 'Dispensé',
+                            'inapte' => 'Inapte',
+                        ]),
+
+                    Select::make('etat')
+                        ->label('État')
+                        ->options([
+                            'Actif' => 'Actif',
+                            'Inactif' => 'Inactif',
+                        ])
+                        ->default('Actif'),
                 ]),
-                
-            ]);
+        ]);
+}
 
-    }
 
     public static function table(Table $table): Table
     {
