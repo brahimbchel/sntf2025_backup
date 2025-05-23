@@ -67,8 +67,7 @@ public static function getEloquentQuery(): Builder
                         ->label('Mot de passe')
                         ->password()
                         ->minLength(6)
-                        ->dehydrated(fn($state) => filled($state))
-                        ->nullable(),
+                        ->required(fn (callable $get, $context) => $context === 'create'),
 
                     Forms\Components\TextInput::make('nom')
                         ->required()

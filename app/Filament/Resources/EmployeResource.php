@@ -87,13 +87,13 @@ public static function canDelete(Model $record): bool
                     Forms\Components\TextInput::make('user.email')
                         ->label('Email')
                         ->email()
-                        ->required()
-                        ->unique(User::class, 'email'),
+                        ->unique(User::class, 'email')
+                        ->required(fn (callable $get, $context) => $context === 'create'),
 
                     Forms\Components\TextInput::make('user.password')
                         ->label('Mot de passe')
                         ->password()
-                        ->required()
+                        ->required(fn (callable $get, $context) => $context === 'create')
                         ->minLength(6),
 
                     // Champs de l'employé
