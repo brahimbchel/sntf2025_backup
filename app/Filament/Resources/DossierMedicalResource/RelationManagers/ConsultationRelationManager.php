@@ -40,27 +40,89 @@ class ConsultationRelationManager extends RelationManager
 
                 TextInput::make('note')->maxLength(255),
 
-                // --- Section Result ---
-                Section::make('Resultats')->schema([
-                    Repeater::make('resultats')
-                        ->relationship('resultats')
-                        ->schema([
-                             TextInput::make('appareil_name')
-                                ->label('Appareil')
-                                ->disabled()
-                                ->dehydrated()
-                                ->formatStateUsing(fn ($state, $record) => $record?->rubrique?->appareil?->nom),
-                            Forms\Components\Select::make('rubrique_id')
-                                ->relationship('rubrique', 'titre')
-                                ->searchable()
-                                ->preload()
-                                ->required(),
-                            Forms\Components\TextInput::make('resultat')
-                                ->label('Résultat')
-                                ->maxLength(100)
-                                ->required(),
-                        ])->columns(3),
-                ])->collapsible(),
+
+                
+
+        // Section::make('Résultats')
+        //     ->schema([
+        //         // --- Sous-section Interrogatoires ---
+        //         Section::make('Interrogatoires')
+        //             ->schema([
+        //                 Repeater::make('resultats')
+        //                     ->label('Résultats Interrogatoires')
+        //                     ->relationship('resultats')
+        //                     ->schema([
+        //                         Forms\Components\Select::make('rubrique_id')
+        //                             ->label('Rubrique')
+        //                             ->options(
+        //                                 Rubrique::with('appareil')->get()->mapWithKeys(function ($rubrique) {
+        //                                     $appareilNom = $rubrique->appareil?->nom ?? 'Sans appareil';
+        //                                     return [$rubrique->id => "{$rubrique->titre} ({$appareilNom})"];
+        //                                 })->toArray()
+        //                             )
+        //                             ->required()
+        //                             ->searchable()
+        //                             ->preload()
+        //                             ->createOptionForm([
+        //                                 Forms\Components\TextInput::make('titre')
+        //                                     ->label('Titre de la rubrique')
+        //                                     ->required(),
+        //                                 Forms\Components\Select::make('App_id')
+        //                                     ->label('Appareil')
+        //                                     ->relationship('appareil', 'nom')
+        //                                     ->required()
+        //                                     ->createOptionForm([
+        //                                         Forms\Components\TextInput::make('nom')
+        //                                             ->label('Nom appareil')
+        //                                             ->required(),
+        //                                     ]),
+        //                             ]),
+        //                         Forms\Components\TextInput::make('resultat')
+        //                             ->label('Résultat')
+        //                             ->required()
+        //                             ->maxLength(100),
+        //                     ])
+        //                     ->columns(2),
+        //             ])
+        //             ->collapsible(),
+
+        //         // --- Sous-section Examen Clinique ---
+        //         Section::make('Examen Clinique')
+        //             ->schema([
+        //                 Repeater::make('examens_cliniques')
+        //                     ->label('Examens Cliniques')
+        //                     ->schema([
+        //                         Forms\Components\Select::make('appareil_id')
+        //                             ->label('Appareil')
+        //                             ->options(
+        //                                 Appareil::all()->pluck('nom', 'id')->toArray()
+        //                             )
+        //                             ->required()
+        //                             ->reactive()
+        //                             ->afterStateUpdated(function ($state, callable $set) {
+        //                                 $appareil = Appareil::find($state);
+        //                                 $set('examenClinique', $appareil?->examenClinique);
+        //                             })
+        //                             ->createOptionForm([
+        //                                 Forms\Components\TextInput::make('nom')
+        //                                     ->label('Nom appareil')
+        //                                     ->required(),
+        //                                 Forms\Components\Textarea::make('examenClinique')
+        //                                     ->label('Examen Clinique')
+        //                                     ->rows(2),
+        //                             ]),
+
+        //                         Forms\Components\Textarea::make('examenClinique')
+        //                             ->label('Examen Clinique')
+        //                             ->dehydrated(false)
+        //                             ->rows(3),
+        //                     ])
+        //                     ->columns(2),
+        //             ])
+        //             ->collapsible(),
+        //                         ]),
+
+        
 
                 // --- Explorations Fonctionnelles ---
                 Section::make('Explorations Fonctionnelles')->schema([
@@ -148,6 +210,7 @@ class ConsultationRelationManager extends RelationManager
                 ]),
             ]);
     }
+
 
     public static function getRelations(): array
     {
