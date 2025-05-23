@@ -7,8 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SendLoginInfoNotification extends Notification
+class SendLoginInfoNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
+
     protected $email;
     protected $password;
 
@@ -28,30 +30,17 @@ class SendLoginInfoNotification extends Notification
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
+
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject('Your Account Info')
-            // ->greeting("Hello {$notifiable->prenom},") // assuming 'prenom' means first name
+            ->greeting("Hello " . $notifiable->prenom . ",")
             ->line('Your account has been created.')
             ->line("Email: {$this->email}")
-            ->line("Password: {$this->password}")
-            ->line('Please log in and change your password after your first login.')
+            ->line("Temporary Password: {$this->password}")
+            ->action('Login Now', route('filament.admin.auth.login'))
+            ->line('Please change your password after first login!')
             ->salutation('– PFE Team');
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
     }
 }

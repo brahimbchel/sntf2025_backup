@@ -48,8 +48,4 @@ class MedicamentController extends Controller
 
         return response()->json(['message' => 'Deleted']);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> bm_dani

@@ -61,8 +61,4 @@ class ExplorationComplementaireController extends Controller
 
         return response()->json(['message' => 'Deleted successfully']);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> bm_dani

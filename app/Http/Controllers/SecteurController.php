@@ -78,8 +78,4 @@ class SecteurController extends Controller
 
         return response()->json(['message' => 'Deleted successfully'], 200);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> bm_dani

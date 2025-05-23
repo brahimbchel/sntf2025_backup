@@ -94,9 +94,4 @@ class ConsultationController extends Controller
 
         return response()->json($consultations, 200);
     }
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> bm_dani
