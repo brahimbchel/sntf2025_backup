@@ -40,36 +40,27 @@ class ConsultationRelationManager extends RelationManager
 
                 TextInput::make('note')->maxLength(255),
 
-                // --- Section Appareils ---
-                Section::make('Appareils')->schema([
-    Repeater::make('appareils')
-        ->relationship('appareils') // Relation avec le modèle Consultation
-        ->schema([
-            TextInput::make('nom')->label('Nom de l\'Appareil')->required(),
-
-            Textarea::make('examenClinique')
-                ->label('Examen Clinique')
-                ->maxLength(500),
-
-            Section::make('Interrogatoires')->schema([
-                Repeater::make('rubriques')
-    ->relationship('rubriques')
-    ->schema([
-        TextInput::make('titre')
-            ->label('Nom de la Rubrique')
-            ->required(),
-
-        TextInput::make('resultat') // Accessing the 'resultat' relationship
-            ->label('Résultat')
-            ->required()
-            ->maxLength(100),
-    ])
-    ->columns(2),
-            ])->collapsible(),
-        ])
-        ->columns(1)
-        ->collapsible(),
-])->collapsible(),
+                // --- Section Result ---
+                Section::make('Resultats')->schema([
+                    Repeater::make('resultats')
+                        ->relationship('resultats')
+                        ->schema([
+                             TextInput::make('appareil_name')
+                                ->label('Appareil')
+                                ->disabled()
+                                ->dehydrated()
+                                ->formatStateUsing(fn ($state, $record) => $record?->rubrique?->appareil?->nom),
+                            Forms\Components\Select::make('rubrique_id')
+                                ->relationship('rubrique', 'titre')
+                                ->searchable()
+                                ->preload()
+                                ->required(),
+                            Forms\Components\TextInput::make('resultat')
+                                ->label('Résultat')
+                                ->maxLength(100)
+                                ->required(),
+                        ])->columns(3),
+                ])->collapsible(),
 
                 // --- Explorations Fonctionnelles ---
                 Section::make('Explorations Fonctionnelles')->schema([
@@ -158,20 +149,20 @@ class ConsultationRelationManager extends RelationManager
             ]);
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
-{
-    Log::info('Data before saving:', $data);
+//     protected function mutateFormDataBeforeSave(array $data): array
+// {
+//     Log::info('Data before saving:', $data);
 
-    foreach ($data['appareils'] as $appareilData) {
-        Log::info('Processing appareil:', $appareilData);
+//     foreach ($data['appareils'] as $appareilData) {
+//         Log::info('Processing appareil:', $appareilData);
 
-        foreach ($appareilData['rubriques'] as $rubriqueData) {
-            Log::info('Processing rubrique:', $rubriqueData);
-        }
-    }
+//         foreach ($appareilData['rubriques'] as $rubriqueData) {
+//             Log::info('Processing rubrique:', $rubriqueData);
+//         }
+//     }
 
-    return $data;
-}
+//     return $data;
+// }
 
     public static function getRelations(): array
     {

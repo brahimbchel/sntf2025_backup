@@ -23,7 +23,7 @@ class Appareil extends Model
 
     protected $fillable = [
         'nom',
-        'examenClinique',
+        // 'examenClinique',
     ];
 
     public function rubriques()
