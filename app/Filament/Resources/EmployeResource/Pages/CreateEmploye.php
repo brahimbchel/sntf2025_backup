@@ -25,9 +25,6 @@ class CreateEmploye extends CreateRecord
         // Associer user_id à l'employé
         $data['user_id'] = $user->id;
 
-        // $user->assignRole('employe');
-        $user->role = 'employe';
-
         // Supprimer les champs inutiles
         unset($data['user']);
 

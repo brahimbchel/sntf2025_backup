@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+
 use App\Filament\Resources\BaseResource;
 
 class MedecinResource extends Resource
@@ -43,30 +45,31 @@ public static function getNavigationSort(): ?int
     return auth()->user()?->isAdmin();
 }
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('User Information')
-                    ->schema([
-                        Forms\Components\TextInput::make('user.email')
-                            ->label('Email')
-                            ->email()
-                            ->required()
-                            ->unique(User::class, 'email'),
+public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()->with(['user', 'specialite', 'Centre_Medical']);
+}
 
-                        Forms\Components\TextInput::make('user.name')->required(),
 
-                        Forms\Components\TextInput::make('user.password')
-                            ->label('Password')
-                            ->password()
-                            ->required()
-                            ->minLength(6),
-                            // ->dehydrated(fn ($state) => filled($state)),
-                            // ->dehydrated(false), // Don't save to Employe model
-                    ]),
-                Forms\Components\Section::make('Medecin Information')
-                    ->schema([
+        public static function form(Form $form): Form
+{
+    return $form
+        ->schema([
+                    Forms\Components\Section::make('Informations du Médecin')
+                ->columns(2)
+                ->schema([
+                    Forms\Components\TextInput::make('user.email')
+                ->label('Email')
+                ->email()
+                ->required(fn (callable $get, $context) => $context === 'create'),
+                        
+                    Forms\Components\TextInput::make('user.password')
+                        ->label('Mot de passe')
+                        ->password()
+                        ->minLength(6)
+                        ->dehydrated(fn($state) => filled($state))
+                        ->nullable(),
+
                     Forms\Components\TextInput::make('nom')
                         ->required()
                         ->maxLength(100),
@@ -74,29 +77,37 @@ public static function getNavigationSort(): ?int
                     Forms\Components\TextInput::make('prenom')
                         ->required()
                         ->maxLength(100),
-                    
+
                     Forms\Components\TextInput::make('tel')
                         ->label("Numéro de téléphone")
                         ->telRegex('/^(05|06|07)[0-9]{8}$/')
                         ->required(),
 
-                    Forms\Components\TextInput::make('email')
-                        ->email()
-                        ->maxLength(50),
+                    Select::make('Specialite')
+                        ->label('Spécialité')
+                        ->relationship('Specialite', 'nom')
+                        ->preload()
+                        ->searchable()
+                        ->required(),
 
-                    Select::make('Specialite')->label('Specialite')->relationship('Specialite', 'nom')->preload()->searchable()->required(),
-                    Select::make('CentreMedical_id')->label('CMS')->relationship('Centre_Medical', 'nom')->preload()->searchable(),
-                
+                    Select::make('CentreMedical_id')
+                        ->label('CMS')
+                        ->relationship('Centre_Medical', 'nom')
+                        ->preload()
+                        ->searchable(),
+
                     Select::make('gender')
+                        ->label('Sexe')
                         ->options([
                             'Homme' => 'Homme',
                             'Femme' => 'Femme',
                         ])
                         ->required(),
                 ])
-            ]);
-            
-    }
+        ]);
+}
+
+
 
     public static function table(Table $table): Table
     {

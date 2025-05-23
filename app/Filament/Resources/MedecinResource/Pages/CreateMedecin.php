@@ -18,23 +18,19 @@ class CreateMedecin extends CreateRecord
             throw new \Exception("User email or password is missing.");
         }
 
-         // Create user first
+        // Création du compte utilisateur
         $user = User::create([
             'email' => $data['user']['email'],
             'password' => Hash::make($data['user']['password']),
-            'name' => $data['user']['name'] ?? "null",
+            'name' => $data['medecin']['nom'] . ' ' . $data['medecin']['prenom'],
+            'role' => 'medecin',
         ]);
 
-        // Assign 'medecin' role
-        // $user->assignRole('medecin');
-        $user->role = 'medecin';
-
-         // Remove 'user' subarray from employe data
         unset($data['user']);
 
-        // Link user to employe
+        // Liaison avec le médecin
         $data['user_id'] = $user->id;
 
         return $data;
-    }  
+    }
 }
