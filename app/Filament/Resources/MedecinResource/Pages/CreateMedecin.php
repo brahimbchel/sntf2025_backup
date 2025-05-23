@@ -22,7 +22,7 @@ class CreateMedecin extends CreateRecord
         $user = User::create([
             'email' => $data['user']['email'],
             'password' => Hash::make($data['user']['password']),
-            'name' => $data['medecin']['nom'] . ' ' . $data['medecin']['prenom'],
+            'name' => $data['nom'] . ' ' . $data['prenom'],
             'role' => 'medecin',
         ]);
 

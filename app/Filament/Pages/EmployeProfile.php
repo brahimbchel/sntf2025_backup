@@ -8,18 +8,28 @@ use Illuminate\Support\Facades\Auth;
 
 class EmployeProfile extends Page
 {
-    public static function canViewAny(): bool
-{
-    return auth()->user()?->isEmploye();
-}
-
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
     protected static string $view = 'filament.pages.employe-profile2';
-
     protected static ?string $navigationLabel = 'Mon Profil';
     protected static ?string $navigationGroup = 'Staff & Users';
 
     public $employe;
+
+        public static function canView(): bool
+    {
+        return auth()->user()?->isEmploye();
+    }
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->isEmploye();
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->isEmploye();
+    }
+
 
      public function mount()
     {

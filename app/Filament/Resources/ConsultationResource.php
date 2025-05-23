@@ -181,9 +181,23 @@ public static function canDelete(Model $record): bool
                 ->sortable(),
         ])
             
-            ->filters([
-                //
-            ])
+                    ->filters([
+            Tables\Filters\SelectFilter::make('time_period')
+                ->label('Période')
+                ->options([
+                    'upcoming' => 'Rendez-vous à venir',
+                    'past' => 'Consultations passées',
+                ])
+                ->default('upcoming')
+                ->query(function (Builder $query, array $data) {
+                    if ($data['value'] === 'upcoming') {
+                        return $query->where('date_consultation', '>=', now()->startOfDay());
+                    } elseif ($data['value'] === 'past') {
+                        return $query->where('date_consultation', '<', now()->startOfDay());
+                    }
+                    return $query;
+                }),
+        ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),

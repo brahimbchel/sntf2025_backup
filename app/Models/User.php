@@ -12,6 +12,7 @@ use App\Models\Role;
 class User extends Authenticatable
 {
     use HasApiTokens;
+    use Notifiable;
 
     public const ROLE_ADMIN = 'admin';
     public const ROLE_EMPLOYE = 'employe';

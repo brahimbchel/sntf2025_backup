@@ -9,6 +9,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Class Employe
@@ -32,6 +33,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Employe extends Model
 {
+	use Notifiable;
+
 	protected $table = 'employe';
 	public $timestamps = false;
 
