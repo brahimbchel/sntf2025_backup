@@ -149,21 +149,6 @@ class ConsultationRelationManager extends RelationManager
             ]);
     }
 
-//     protected function mutateFormDataBeforeSave(array $data): array
-// {
-//     Log::info('Data before saving:', $data);
-
-//     foreach ($data['appareils'] as $appareilData) {
-//         Log::info('Processing appareil:', $appareilData);
-
-//         foreach ($appareilData['rubriques'] as $rubriqueData) {
-//             Log::info('Processing rubrique:', $rubriqueData);
-//         }
-//     }
-
-//     return $data;
-// }
-
     public static function getRelations(): array
     {
         return [
