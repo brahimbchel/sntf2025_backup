@@ -18,7 +18,7 @@ class OrdonanceController extends Controller
         return response()->json(['message' => 'Employé non trouvé'], 404);
     }
 
-    $dossier = DossierMedical::where('employe_id', $employeId)->first();
+    $dossier = DossierMedical::where('emp_id', $employeId)->first();
 
     if (!$dossier) {
         return response()->json(['message' => 'Dossier médical non trouvé'], 404);
