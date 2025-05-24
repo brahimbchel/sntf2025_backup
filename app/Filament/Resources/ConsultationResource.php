@@ -16,7 +16,8 @@ use App\Models\Medecin;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
 use App\Filament\Resources\BaseResource;
-
+use App\Notifications\ConsultationDeletedNotification;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Model;
 
 class ConsultationResource extends Resource
@@ -198,13 +199,36 @@ public static function canDelete(Model $record): bool
                     return $query;
                 }),
         ])
+            // ->actions([
+            //     Tables\Actions\ViewAction::make(),
+            //     Tables\Actions\EditAction::make(),
+            // ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
-             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            Tables\Actions\ViewAction::make(),
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make()
+                ->before(function (Consultation $record) {
+                    // Get the employee associated with the consultation
+                    $employeUser = $record->dossier_medical->employe->user;
+
+                    $employeUser ->notify(new ConsultationDeletedNotification(
+                            $record
+                    ));
+                }),
+        ])
+            ->bulkActions([
+            Tables\Actions\DeleteBulkAction::make()
+                ->before(function ($records) {
+                    foreach ($records as $record) {
+                        $employeUser = $record->dossier_medical->employe->user;
+
+                        $employeUser ->notify(new ConsultationDeletedNotification(
+                                $record
+                        ));
+                    }
+                }),
+        ])
+            ;
 
     }
 

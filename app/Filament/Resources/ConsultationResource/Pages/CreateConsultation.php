@@ -25,10 +25,10 @@ class CreateConsultation extends CreateRecord
         $date = now()->format('Y-m-d'); // Or pull this from $data if you have a consultation date field
 
         // Notify medecin
-        $medecin->user->notify(new MedecinConsultationNotification(
-            $dossier->employe->nom,
-            $date
-        ));
+        // $medecin->user->notify(new MedecinConsultationNotification(
+        //     $dossier->employe->nom,
+        //     $date
+        // ));
 
         // Notify employe
         $dossier->employe->user->notify(new EmployeConsultationNotification(

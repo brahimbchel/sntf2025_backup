@@ -7,15 +7,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EmployeConsultationNotification extends Notification
+class ConsultationDeletedNotification extends Notification
 {
-    protected $medecinName;
-    protected $date;
+    protected $consultation;
 
-    public function __construct($medecinName, $date)
+    public function __construct($consultation)
     {
-        $this->medecinName = $medecinName;
-        $this->date = $date;
+        $this->consultation = $consultation;
     }
 
     /**
@@ -33,13 +31,15 @@ class EmployeConsultationNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->subject('Consultation programmée')
-            ->greeting("Bonjour ,")
-            ->line("Une consultation a été programmée.")
-            ->line("Date : {$this->date}")
-            ->action('Voir les détails', url('/consultations'))
-            ->salutation('– Équipe PFE');
+        $date = optional($this->consultation->date_consultation)?->format('d/m/Y') ?? 'date inconnue';
+
+       return (new MailMessage)
+            ->subject('Annulation de consultation')
+            ->line('Votre consultation prévue le ' . $date . ' a été annulée.')
+            ->line('Médecin: ' . $this->consultation->medecin->nom . ' ' . $this->consultation->medecin->prenom)
+            ->line('Type: ' . $this->consultation->type)
+            ->line('Si vous avez des questions, veuillez contacter votre administrateur.')
+            ->salutation('Cordialement');
     }
 
     /**
