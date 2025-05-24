@@ -35,20 +35,5 @@ class CreateEmploye extends CreateRecord
         unset($data['user']);
 
         return $data;
-    }
-
-    // protected function afterCreate(): void
-    // {
-    //     // Get the associated user
-    //     $user = $this->record->user;
-        
-    //     // Send notification if user exists
-    //     if ($user && $user->email) {
-    //         $user->notify(new SendLoginInfoNotification(
-    //             $user->email,
-    //             $user->password
-    //         ));
-    //     }
-    // }
-    
+    }    
 }

@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Class Medecin
@@ -28,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Medecin extends Model
 {
+	use Notifiable;
+	
 	protected $table = 'medecin';
 	public $timestamps = false;
 
