@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Ordonnance;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +19,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Route::get('/ordonnances/{record}/print', function (Ordonnance $record) {
+    return view('ordonnances.print', ['ordonnance' => $record]);
+})->name('ordonnances.print');
