@@ -31,6 +31,12 @@ public static function getNavigationSort(): ?int
     return 3;
 }
 
+public static function shouldRegisterNavigation(): bool
+{
+    return false;
+}
+
+
     //    public static function canViewAny(): bool
     // {
     //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;

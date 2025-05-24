@@ -23,7 +23,7 @@ class ConsultationResource extends Resource
 {
     protected static ?string $model = Consultation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function getNavigationGroup(): ?string
 {

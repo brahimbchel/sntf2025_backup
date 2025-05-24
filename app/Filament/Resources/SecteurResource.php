@@ -19,11 +19,11 @@ class SecteurResource extends Resource
 {
     protected static ?string $model = Secteur::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?string $navigationIcon = 'heroicon-o-map-pin';
 
-        public static function getNavigationGroup(): ?string
+     public static function getNavigationGroup(): ?string
 {
-    return 'Centers';
+        return 'Centers';
 }
 
 public static function getNavigationSort(): ?int

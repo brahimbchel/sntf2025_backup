@@ -66,13 +66,11 @@ public static function getNavigationSort(): ?int
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                Tables\Actions\EditAction::make()
+                    ->visible(fn ($record): bool =>
+                     auth()->user()->isMedecin() && $record->consultation->medecin_id === auth()->user()->medecin->id
+                    ),
+                   ]);
     }
 
     public static function getRelations(): array
@@ -86,7 +84,7 @@ public static function getNavigationSort(): ?int
     {
         return [
             'index' => Pages\ListOrdonnances::route('/'),
-            'create' => Pages\CreateOrdonnance::route('/create'),
+            //'create' => Pages\CreateOrdonnance::route('/create'),
             'view' => Pages\ViewOrdonnance::route('/{record}'),
             'edit' => Pages\EditOrdonnance::route('/{record}/edit'),
         ];

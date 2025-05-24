@@ -33,7 +33,7 @@ public static function getNavigationSort(): ?int
 
     protected static ?string $model = CentreMedical::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     // public static function canViewAny(): bool
     // {

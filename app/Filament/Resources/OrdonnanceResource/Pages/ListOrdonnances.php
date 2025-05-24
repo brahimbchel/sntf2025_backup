@@ -10,10 +10,10 @@ class ListOrdonnances extends ListRecords
 {
     protected static string $resource = OrdonnanceResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\CreateAction::make(),
-        ];
-    }
+    public static function canAccess(array $parameters = []): bool
+{
+    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+}
+
+
 }

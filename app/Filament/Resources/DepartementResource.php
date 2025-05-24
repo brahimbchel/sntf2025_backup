@@ -20,7 +20,7 @@ class DepartementResource extends Resource
 {
     protected static ?string $model = Departement::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-home';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
         public static function getNavigationGroup(): ?string
 {

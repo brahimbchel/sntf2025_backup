@@ -23,7 +23,7 @@ class DossierMedicalResource extends Resource
 {
     protected static string $relationship = 'consultations'; // nom de la relation Eloquent dans DossierMedical
     protected static ?string $model = DossierMedical::class;
-    protected static ?string $navigationIcon = 'heroicon-o-document';
+    protected static ?string $navigationIcon = 'heroicon-o-folder';
 
     public static function getNavigationGroup(): ?string
 {
