@@ -215,7 +215,6 @@ class ConsultationRelationManager extends RelationManager
     public static function getRelations(): array
     {
         return [
-            // Tu peux les ajouter ou les désactiver si tu les affiches déjà dans la page consultation
         ];
     }
 }

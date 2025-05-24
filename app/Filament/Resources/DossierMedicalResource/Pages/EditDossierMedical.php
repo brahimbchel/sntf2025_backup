@@ -16,4 +16,9 @@ class EditDossierMedical extends EditRecord
             
         ];
     }
+
+    protected function authorizeAccess(): void
+    {
+        abort_unless(auth()->user()?->isMedecin(), 403);
+    }
 }

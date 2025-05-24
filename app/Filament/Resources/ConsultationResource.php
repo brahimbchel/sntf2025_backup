@@ -36,9 +36,9 @@ public static function getNavigationSort(): ?int
     return 2;
 }
 
-    public static function canCreate(): bool
+public static function canCreate(): bool
 {
-    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+    return auth()->user()?->isAdmin();
 }
 
 public static function canEdit(Model $record): bool
@@ -48,7 +48,7 @@ public static function canEdit(Model $record): bool
 
 public static function canDelete(Model $record): bool
 {
-    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+    return auth()->user()?->isAdmin();
 }
 
     public static function getEloquentQuery(): Builder
@@ -74,68 +74,79 @@ public static function canDelete(Model $record): bool
 }
 
     public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-        
-                Select::make('dossier_id')
-                ->label('Employé')
-                ->options(
-                    \App\Models\DossierMedical::with('employe') // Charger les employés associés aux dossiers
-                        ->get()
-                        ->filter(fn ($dossier) => $dossier->employe)
-                        ->mapWithKeys(fn ($dossier) => [
-                            $dossier->id => $dossier->employe->nom . ' ' . $dossier->employe->prenom
-                        ])
-                )
-                ->searchable()
-                ->preload()
-                ->required(),
+{
+    return $form->schema([
+        Select::make('dossier_id')
+            ->label('Employé')
+            ->disabled(fn ($record) => $record && auth()->user()?->isAdmin())
+            ->options(
+                \App\Models\DossierMedical::with('employe')
+                    ->get()
+                    ->filter(fn ($dossier) => $dossier->employe)
+                    ->mapWithKeys(fn ($dossier) => [
+                        $dossier->id => $dossier->employe->nom . ' ' . $dossier->employe->prenom
+                    ])
+            )
+            ->searchable()
+            ->preload()
+            ->required(),
 
+        Select::make('medecin_id')
+            ->label('Médecin')
+            ->disabled(fn ($record) => $record && auth()->user()?->isAdmin())
+            ->options(function () {
+                return Medecin::with('specialite')->get()->mapWithKeys(function ($medecin) {
+                    $specialite = $medecin->specialite->nom ?? 'Aucune spécialité';
+                    return [$medecin->id => $medecin->nom . ' ' . $medecin->prenom . ' (' . $specialite . ')'];
+                });
+            })
+            ->searchable()
+            ->preload()
+            ->required(),
 
-                Select::make('medecin_id')
-                ->label('Médecin')
-                ->options(function () {
-                    return Medecin::with('specialite')->get()->mapWithKeys(function ($medecin) {
-                        $specialite = $medecin->specialite->nom ?? 'Aucune spécialité';
-                        return [$medecin->id => $medecin->nom . ' ' . $medecin->prenom . ' (' . $specialite . ')'];
-                    });
-                })
-                ->searchable()
-                ->preload()
-                ->required(),
+        Select::make('type')
+            ->label('Type de consultation')
+            ->options([
+                'Admission' => 'Admission',
+                'Périodique' => 'Périodique',
+                'Spontané' => 'Spontané',
+                'Reprise' => 'Reprise',
+                'Contrôle' => 'Contrôle',
+                'AccidentDeTravail' => 'Accident de Travail',
+                'ContreVisite' => 'Contre Visite',
+                'Réintégration' => 'Réintégration',
+            ])
+            ->required()
+            ->disabled(function ($state, $record) {
+                $user = auth()->user();
+                return
+                    ($user?->isAdmin() && $record && $record->date_consultation < today()) || // Admins can't edit if date passed
+                    $user?->isMedecin(); // Médecins ne peuvent jamais modifier ce champ
+            }),
 
-                Select::make('type')
-                ->label('Type de consultation')
-                ->options([
-                    'Admission' => 'Admission',
-                    'Périodique' => 'Périodique',
-                    'Spontané' => 'Spontané',
-                    'Reprise' => 'Reprise',
-                    'Contrôle' => 'Contrôle',
-                    'AccidentDeTravail' => 'Accident de Travail',
-                    'ContreVisite' => 'Contre Visite',
-                    'Réintégration' => 'Réintégration',
-                ])
-                ->required(),
+        Select::make('aptitude')
+            ->label('Aptitude')
+            ->options([
+                'apte' => 'Apte',
+                'apte avec reserve' => 'Apte avec réserve',
+                'inapte' => 'Inapte',
+                'inapte définitif' => 'Inapte définitif',
+            ])
+            ->disabled(fn () => auth()->user()?->isAdmin()),
 
-            Select::make('aptitude')
-                ->label('Aptitude')
-                ->options([
-                    'apte' => 'Apte',
-                    'apte avec reserve' => 'apte avec reserve',
-                    'inapte' => 'Inapte',
-                    'inapte définitif' => 'inapte définitif'
-                ]),
+        Forms\Components\DatePicker::make('date_consultation')
+            ->displayFormat('d/m/Y')
+            ->label('Date de Rendez-Vous')
+            ->minDate(now()->addDay()->startOfDay())
+            ->disabled(function ($record) {
+                $user = auth()->user();
+                return
+                    ($user?->isAdmin() && $record && $record->date_consultation < today()) || // Admins can't edit if date passed
+                    ($record && $user?->isMedecin()); // Médecins ne peuvent pas modifier si c’est une édition
+         }),
+         ]);
+}
 
-            Forms\Components\DatePicker::make('date_consultation')
-                ->displayFormat('d/m/Y')
-                ->label('Date de Rendez-Vous')
-                ->minDate(now()->addDay()->startOfDay()),
-            // Forms\Components\Textarea::make('diagnostic')
-            //     ->columnSpanFull(),
-            ]);
-    }
 
     public static function table(Table $table): Table
     {
@@ -151,6 +162,14 @@ public static function canDelete(Model $record): bool
                 ->searchable(),
             Tables\Columns\TextColumn::make('medecin.nom')
                 ->label('Nom Médecin')
+                ->sortable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('medecin.nom')
+                ->label('Prénom Médecin')
+                ->sortable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('medecin.specialite.nom')
+                ->label('Spécialité')
                 ->sortable()
                 ->searchable(),
 
@@ -243,14 +262,14 @@ public static function canDelete(Model $record): bool
             'edit' => Pages\EditConsultation::route('/{record}/edit'),
         ];
     }
-    public static function getRelations(): array
-{
-    return [
-        RelationManagers\OrdonnanceRelationManager::class,
-        RelationManagers\ExplorationComplementaireRelationManager::class,
-        RelationManagers\ExplorationFonctionnelleRelationManager::class,
-        RelationManagers\AppRelationManager::class,
-    ];
-}
+//     public static function getRelations(): array
+// {
+//     return [
+//         RelationManagers\OrdonnanceRelationManager::class,
+//         RelationManagers\ExplorationComplementaireRelationManager::class,
+//         RelationManagers\ExplorationFonctionnelleRelationManager::class,
+//         RelationManagers\AppRelationManager::class,
+//     ];
+// }
 
 }

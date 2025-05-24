@@ -119,16 +119,14 @@ public static function getNavigationSort(): ?int
                 ->searchable(),
             ])
 
-            ->filters([
+                ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]);
+                ->actions([
+            Tables\Actions\ViewAction::make(),
+            Tables\Actions\EditAction::make()
+                ->visible(fn () => auth()->user()?->isMedecin()),
+           ]);
 
     }
 
@@ -144,7 +142,7 @@ public static function getNavigationSort(): ?int
     {
         return [
             'index' => Pages\ListDossierMedicals::route('/'),
-            'create' => Pages\CreateDossierMedical::route('/create'),
+            // 'create' => Pages\CreateDossierMedical::route('/create'),
             'view' => Pages\ViewDossierMedical::route('/{record}'),
             'edit' => Pages\EditDossierMedical::route('/{record}/edit'),
         ];
