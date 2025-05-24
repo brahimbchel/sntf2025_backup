@@ -200,7 +200,14 @@ class ConsultationRelationManager extends RelationManager
             ->actions([
                 Tables\Actions\ViewAction::make()->label('Voir')->icon('heroicon-o-eye')->openUrlInNewTab(),
                 Tables\Actions\EditAction::make()
-                    ->visible(fn ($record) => \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday())
+                    ->visible(function ($record) {
+                                                $user = auth()->user();
+                                                $isToday = \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday();
+                                                if ($user?->isMedecin() && $record->medecin_id === $user->medecin->id) {
+                                                return $isToday;
+                                                    }
+                                                return false;
+    })
                     ->tooltip('Éditer uniquement une consultation du jour')
                     ->icon('heroicon-o-pencil'),
             ])

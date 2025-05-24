@@ -13,7 +13,6 @@ class ListDossierMedicals extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
         ];
     }
     public static function canCreate(): bool

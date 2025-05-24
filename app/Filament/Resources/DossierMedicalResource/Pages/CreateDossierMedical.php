@@ -9,4 +9,8 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDossierMedical extends CreateRecord
 {
     protected static string $resource = DossierMedicalResource::class;
+    protected function authorizeAccess(): void
+{
+    abort(403);
+}
 }
