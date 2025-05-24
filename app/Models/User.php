@@ -47,7 +47,7 @@ public function hasRole(string|array $roles): bool
 
     public function employe()
     {
-        return $this->hasOne(Employe::class);
+        return $this->hasOne(Employe::class, 'user_id');
     }
 
     public function medecin()
