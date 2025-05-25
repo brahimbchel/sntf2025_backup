@@ -20,6 +20,9 @@ class Resultat extends Model
 {
     protected $table = 'resultat';
     public $timestamps = true;
+    public $incrementing = false; // pk composite
+    protected $primaryKey = ['rubrique_id', 'consultation_id'];
+
 
     protected $casts = [
         'rubrique_id' => 'int',

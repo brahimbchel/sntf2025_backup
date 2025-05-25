@@ -30,6 +30,7 @@ class Rubrique extends Model
     protected $fillable = [
         'App_id',
         'titre',
+        'type',
     ];
 
     public function appareil()

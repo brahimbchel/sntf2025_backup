@@ -33,6 +33,7 @@ class OrdonanceController extends Controller
             $ordonnances->push([
                 'ordonnance_id' => $ordonnance->id,
                 'date' => $ordonnance->created_at,
+                'recomendations' => $ordonnance->recommandations,
                 'medicaments' => $ordonnance->medicaments->map(function ($med) {
                     return [
                         'id' => $med->id,

@@ -38,91 +38,103 @@ class ConsultationRelationManager extends RelationManager
                         'inapte définitif' => 'Inapte définitif',
                     ]),
 
-                TextInput::make('note')->maxLength(255),
+                Textarea::make('note')->maxLength(255)->rows(3),
+
+Section::make('Resultats')->schema([
+    Repeater::make('interrogatoires_resultats')
+        ->relationship('interrogatoires_resultats')
+        ->schema([
+            Select::make('rubrique_id')
+                ->label('Rubrique')
+                ->options(function () {
+                    return Rubrique::with('appareil')
+                        ->where('type', 'interrogatoire')
+                        ->get()
+                        ->mapWithKeys(function ($rubrique) {
+                            $appareilNom = $rubrique->appareil?->nom ?? 'Aucun appareil';
+                            return [
+                                $rubrique->id => "{$rubrique->titre} – {$appareilNom}",
+                            ];
+                        });
+                })
+                ->searchable()
+                ->preload()
+                ->createOptionForm([
+                    TextInput::make('titre')->required()->label('Titre de la rubrique'),
+                    Select::make('App_id')
+                        ->label('Appareil')
+                        ->relationship('appareil', 'nom')
+                        ->searchable()
+                        ->preload()
+                        ->createOptionForm([
+                            TextInput::make('nom')->required()->label('Nom de l’appareil'),
+                        ])
+                        ->createOptionUsing(fn (array $data) => Appareil::create($data)),
+                ])
+                ->createOptionUsing(function (array $data) {
+                    $rubrique = Rubrique::create([
+                        'titre' => $data['titre'],
+                        'App_id' => $data['App_id'] ?? null,
+                        'type' => 'interrogatoire',
+                    ]);
+                    return $rubrique->id;
+                }),
+            TextInput::make('resultat')
+                ->label('Résultat')
+                ->required()
+                ->maxLength(100),
+        ])
+        ->columns(2),
+])->collapsible(),
+
+Section::make('Examens Cliniques')->schema([
+    Repeater::make('examens_cliniques_resultats')
+        ->relationship('examens_cliniques_resultats')
+        ->schema([
+            Select::make('rubrique_id')
+                ->label('Rubrique')
+                ->options(function () {
+                    return Rubrique::with('appareil')
+                        ->where('type', 'examen_clinique')
+                        ->get()
+                        ->mapWithKeys(function ($rubrique) {
+                            $appareilNom = $rubrique->appareil?->nom ?? 'Aucun appareil';
+                            return [
+                                $rubrique->id => "{$rubrique->titre} – {$appareilNom}",
+                            ];
+                        });
+                })
+                ->searchable()
+                ->preload()
+                ->createOptionForm([
+                    TextInput::make('titre')->required()->label('Titre de la rubrique'),
+                    Select::make('App_id')
+                        ->label('Appareil')
+                        ->relationship('appareil', 'nom')
+                        ->searchable()
+                        ->preload()
+                        ->createOptionForm([
+                            TextInput::make('nom')->required()->label('Nom de l’appareil'),
+                        ])
+                        ->createOptionUsing(fn (array $data) => Appareil::create($data)),
+                ])
+                ->createOptionUsing(function (array $data) {
+                    $rubrique = Rubrique::create([
+                        'titre' => $data['titre'],
+                        'App_id' => $data['App_id'] ?? null,
+                        'type' => 'examen_clinique',
+                    ]);
+                    return $rubrique->id;
+                }),
+            TextInput::make('resultat')
+                ->label('Résultat')
+                ->required()
+                ->maxLength(100),
+        ])
+        ->columns(2),
+])->collapsible(),
 
 
-                
-
-        // Section::make('Résultats')
-        //     ->schema([
-        //         // --- Sous-section Interrogatoires ---
-        //         Section::make('Interrogatoires')
-        //             ->schema([
-        //                 Repeater::make('resultats')
-        //                     ->label('Résultats Interrogatoires')
-        //                     ->relationship('resultats')
-        //                     ->schema([
-        //                         Forms\Components\Select::make('rubrique_id')
-        //                             ->label('Rubrique')
-        //                             ->options(
-        //                                 Rubrique::with('appareil')->get()->mapWithKeys(function ($rubrique) {
-        //                                     $appareilNom = $rubrique->appareil?->nom ?? 'Sans appareil';
-        //                                     return [$rubrique->id => "{$rubrique->titre} ({$appareilNom})"];
-        //                                 })->toArray()
-        //                             )
-        //                             ->required()
-        //                             ->searchable()
-        //                             ->preload()
-        //                             ->createOptionForm([
-        //                                 Forms\Components\TextInput::make('titre')
-        //                                     ->label('Titre de la rubrique')
-        //                                     ->required(),
-        //                                 Forms\Components\Select::make('App_id')
-        //                                     ->label('Appareil')
-        //                                     ->relationship('appareil', 'nom')
-        //                                     ->required()
-        //                                     ->createOptionForm([
-        //                                         Forms\Components\TextInput::make('nom')
-        //                                             ->label('Nom appareil')
-        //                                             ->required(),
-        //                                     ]),
-        //                             ]),
-        //                         Forms\Components\TextInput::make('resultat')
-        //                             ->label('Résultat')
-        //                             ->required()
-        //                             ->maxLength(100),
-        //                     ])
-        //                     ->columns(2),
-        //             ])
-        //             ->collapsible(),
-
-        //         // --- Sous-section Examen Clinique ---
-        //         Section::make('Examen Clinique')
-        //             ->schema([
-        //                 Repeater::make('examens_cliniques')
-        //                     ->label('Examens Cliniques')
-        //                     ->schema([
-        //                         Forms\Components\Select::make('appareil_id')
-        //                             ->label('Appareil')
-        //                             ->options(
-        //                                 Appareil::all()->pluck('nom', 'id')->toArray()
-        //                             )
-        //                             ->required()
-        //                             ->reactive()
-        //                             ->afterStateUpdated(function ($state, callable $set) {
-        //                                 $appareil = Appareil::find($state);
-        //                                 $set('examenClinique', $appareil?->examenClinique);
-        //                             })
-        //                             ->createOptionForm([
-        //                                 Forms\Components\TextInput::make('nom')
-        //                                     ->label('Nom appareil')
-        //                                     ->required(),
-        //                                 Forms\Components\Textarea::make('examenClinique')
-        //                                     ->label('Examen Clinique')
-        //                                     ->rows(2),
-        //                             ]),
-
-        //                         Forms\Components\Textarea::make('examenClinique')
-        //                             ->label('Examen Clinique')
-        //                             ->dehydrated(false)
-        //                             ->rows(3),
-        //                     ])
-        //                     ->columns(2),
-        //             ])
-        //             ->collapsible(),
-        //                         ]),
-
-        
 
                 // --- Explorations Fonctionnelles ---
                 Section::make('Explorations Fonctionnelles')->schema([

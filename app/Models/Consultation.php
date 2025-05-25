@@ -51,18 +51,30 @@ class Consultation extends Model
 		'note'
 	];
 
-	public function dossier_medical()
-	{
-		return $this->belongsTo(DossierMedical::class, 'dossier_id');
-	}
-
-	public function medecin(): BelongsTo
+    protected function mutateFormDataBeforeSave(array $data): array
 {
-    return $this->belongsTo(Medecin::class, 'medecin_id');
+    // Ajoutez un log pour déboguer les données
+    \Log::info('Form data before save:', $data);
+
+    // Transformez les tableaux en chaînes si nécessaire
+    if (isset($data['rubrique_id']) && is_array($data['rubrique_id'])) {
+        $data['rubrique_id'] = implode(',', $data['rubrique_id']);
+    }
+
+    return $data;
 }
 
+    public function dossier_medical()
+    {
+        return $this->belongsTo(DossierMedical::class, 'dossier_id');
+    }
 
-	  public function ordonnances()
+    public function medecin(): BelongsTo
+    {
+        return $this->belongsTo(Medecin::class, 'medecin_id');
+    }
+
+    public function ordonnances()
     {
         return $this->hasMany(Ordonnance::class);
     }
@@ -82,8 +94,19 @@ class Consultation extends Model
         return $this->hasMany(Resultat::class, 'consultation_id');
     }
 
-		public function resultats()
-	{
-		return $this->hasMany(Resultat::class, 'consultation_id');
-	}
+    public function interrogatoires_resultats()
+    {
+        return $this->hasMany(Resultat::class, 'consultation_id', 'id')
+            ->whereHas('rubrique', function ($query) {
+                $query->where('type', 'interrogatoire');
+            });
+    }
+
+    public function examens_cliniques_resultats()
+    {
+        return $this->hasMany(Resultat::class, 'consultation_id', 'id')
+            ->whereHas('rubrique', function ($query) {
+                $query->where('type', 'examen_clinique');
+            });
+    }
 }
