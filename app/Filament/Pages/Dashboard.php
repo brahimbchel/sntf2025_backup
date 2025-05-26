@@ -5,7 +5,7 @@ use Filament\Pages\Dashboard as BaseDashboard;
 use App\Filament\Widgets;
 use App\Filament\Widgets\ConsultationChart;
 use App\Filament\Widgets\ConsultationsStatistiques;
-use App\Filament\Widgets\LatestConsultationsLastWeek;
+use App\Filament\Widgets\TodayConsultationsWidget;
 use App\Filament\Widgets\MedecinsBySpecialiteChart;
 use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\TopMedecins;
@@ -29,7 +29,7 @@ class Dashboard extends BaseDashboard
             ConsultationChart::class,
             MedecinsBySpecialiteChart::class,
             TopMedecins::class,
-            // LatestConsultationsLastWeek::class,
+            TodayConsultationsWidget::class,
             // EmployeeDossierBarChart::class,
             // MedecinOccupancy::class,
             ConsultationsStatistiques::class,
