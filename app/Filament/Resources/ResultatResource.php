@@ -31,10 +31,16 @@ public static function getNavigationSort(): ?int
     return 8;
 }
 
+//             public static function canViewAny(): bool
+// {
+//     return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+// }
+
             public static function canViewAny(): bool
 {
-    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
+    return false;
 }
+
 
     // // this is the corect one
     //  ublic static function canViewAny(): bool
@@ -59,12 +65,6 @@ public static function getNavigationSort(): ?int
                 Forms\Components\Select::make('rubrique_id')
                     ->relationship('rubrique', 'titre')
                     ->required(),
-                // Forms\Components\TextInput::make('rubrique_id')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('consultation_id')
-                //     ->required()
-                //     ->numeric(),
                 Forms\Components\DatePicker::make('dateR')
                     ->required(),
                 Forms\Components\TextInput::make('resultat')
@@ -72,35 +72,71 @@ public static function getNavigationSort(): ?int
             ]);
     }
 
+
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('rubrique_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('consultation_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('dateR')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('resultat')
-                    ->searchable(),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+{
+    return $table
+        ->columns([
+            Tables\Columns\TextColumn::make('rubrique.titre') // show rubrique title
+                ->label('Rubrique')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('consultation.id') // or maybe consultation.patient.nom if you have a relation
+                ->label('Consultation')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('dateR')
+                ->date()
+                ->sortable(),
+
+            Tables\Columns\TextColumn::make('resultat')
+                ->searchable(),
+        ])
+        ->filters([
+            //
+        ])
+        ->actions([
+            Tables\Actions\ViewAction::make(),
+            Tables\Actions\EditAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
+
+    // public static function table(Table $table): Table
+    // {
+    //     return $table
+    //         ->columns([
+    //             Tables\Columns\TextColumn::make('rubrique_id')
+    //                 ->numeric()
+    //                 ->sortable(),
+    //             Tables\Columns\TextColumn::make('consultation_id')
+    //                 ->numeric()
+    //                 ->sortable(),
+    //             Tables\Columns\TextColumn::make('dateR')
+    //                 ->date()
+    //                 ->sortable(),
+    //             Tables\Columns\TextColumn::make('resultat')
+    //                 ->searchable(),
+    //         ])
+    //         ->filters([
+    //             //
+    //         ])
+    //         ->actions([
+    //             Tables\Actions\ViewAction::make(),
+    //             Tables\Actions\EditAction::make(),
+    //         ])
+    //         ->bulkActions([
+    //             Tables\Actions\BulkActionGroup::make([
+    //                 Tables\Actions\DeleteBulkAction::make(),
+    //             ]),
+    //         ]);
+    // }
 
     public static function getRelations(): array
     {

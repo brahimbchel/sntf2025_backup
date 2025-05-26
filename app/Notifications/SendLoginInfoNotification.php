@@ -34,13 +34,13 @@ class SendLoginInfoNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Your Account Info')
-            ->greeting("Hello " . $notifiable->prenom . ",")
-            ->line('Your account has been created.')
-            ->line("Email: {$this->email}")
-            ->line("Temporary Password: {$this->password}")
-            ->action('Login Now', route('filament.admin.auth.login'))
-            ->line('Please change your password after first login!')
-            ->salutation('– PFE Team');
+            ->subject('Informations de votre compte')
+            ->greeting("Bonjour " . $notifiable->prenom . ",")
+            ->line('Votre compte a été créé.')
+            ->line("Email : {$this->email}")
+            ->line("Mot de passe temporaire : {$this->password}")
+            ->action('Se connecter maintenant', route('filament.admin.auth.login'))
+            ->line('Veuillez changer votre mot de passe après votre première connexion !')
+            ->salutation('– Équipe PFE');
     }
 }
