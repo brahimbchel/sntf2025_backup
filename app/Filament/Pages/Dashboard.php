@@ -34,6 +34,9 @@ class Dashboard extends BaseDashboard
             // MedecinOccupancy::class,
             ConsultationsStatistiques::class,
             // MedecinConsultationChart::class,
+            AdminLatestConsultationsWidget::class,
+            NextConsultationCard::class,
+            MobileAppCard::class,   
         ];
     }
 }

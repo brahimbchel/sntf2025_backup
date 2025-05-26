@@ -25,6 +25,7 @@ class MedecinsBySpecialiteChart extends PieChartWidget
 
 
     protected static ?int $sort = 4;
+    protected int | string | array $columnSpan = 1;
 
     protected function getData(): array
     {

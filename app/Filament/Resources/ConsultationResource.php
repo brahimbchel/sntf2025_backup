@@ -162,10 +162,12 @@ public static function canDelete(Model $record): bool
             Tables\Columns\TextColumn::make('dossier_medical.employe.nom')
                 ->label('Nom Employé')
                 ->sortable()
+                ->visible(fn () => !auth()->user()?->isEmploye())
                 ->searchable(),
             Tables\Columns\TextColumn::make('dossier_medical.employe.prenom')
                 ->label('Prénom Employé')
                 ->sortable()
+                ->visible(fn () => !auth()->user()?->isEmploye())
                 ->searchable(),
             Tables\Columns\TextColumn::make('medecin.nom')
                 ->label('Nom Médecin')
@@ -257,7 +259,7 @@ public static function canDelete(Model $record): bool
                                 });
                             });
                         });
-                    }),
+                    })->visible(fn () => !auth()->user()?->isEmploye()),
                 
                 SelectFilter::make('secteur')
                     ->label('Secteur')
@@ -276,7 +278,7 @@ public static function canDelete(Model $record): bool
                                 });
                             });
                         });
-                    }),
+                    })->visible(fn () => !auth()->user()?->isEmploye()),
                 
                 Filter::make('created_between')
     ->form([

@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Filament\Widgets;
+
+use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Tables;
+use App\Models\Consultation;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+
+class AdminLatestConsultationsWidget extends BaseWidget
+{
+    protected static ?string $heading = 'Dernières consultations';
+
+    protected static ?int $sort = 11;
+
+    public static function canView(): bool
+    {
+        return auth()->user()?->isAdmin();
+    }
+
+    protected function getTableQuery(): Builder
+    {
+        $yesterday = Carbon::yesterday();
+        $lastWeekStart = Carbon::now()->subWeek()->startOfWeek(Carbon::SATURDAY);
+        $lastWeekEnd = Carbon::now()->subWeek()->endOfWeek(Carbon::FRIDAY);
+
+        return Consultation::query()
+            ->where(function ($query) use ($yesterday, $lastWeekStart, $lastWeekEnd) {
+                $query->whereDate('date_consultation', $yesterday)
+                    ->orWhereBetween('date_consultation', [$lastWeekStart, $lastWeekEnd]);
+            })
+            ->latest();
+    }
+
+    protected function getTableColumns(): array
+    {
+        return [
+            Tables\Columns\TextColumn::make('dossier_medical.employe.nom')->label('Nom Employé'),
+            Tables\Columns\TextColumn::make('dossier_medical.employe.prenom')->label('Prénom Employé'),
+            Tables\Columns\TextColumn::make('medecin.nom')->label('Médecin'),
+            Tables\Columns\TextColumn::make('date_consultation')->label('Date')->date('d/m/Y'),
+        ];
+    }
+}

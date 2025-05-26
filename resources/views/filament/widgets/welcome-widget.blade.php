@@ -23,8 +23,8 @@
                     Vous êtes connecté en tant que médecin. Depuis ce tableau de bord, vous pouvez consulter vos rendez-vous, accéder aux dossiers médicaux de vos patients et suivre vos statistiques de consultation.
                 </p>
             @elseif ($employe)
-                <p class="text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto">
-                    Vous êtes connecté en tant qu’agent de centre médical. Utilisez ce tableau pour organiser les dossiers, planifier les rendez-vous et assister les médecins dans leur travail quotidien.
+                 <p class="text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto">
+                Bienvenue sur la plateforme, cher employé ! Vous pouvez consulter votre dossier médical, ainsi que vos consultations passées et à venir. Utilisez ces informations pour un suivi médical optimal et pour rester informé de votre santé.
                 </p>
             @else
                 <p class="text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto">
