@@ -1,24 +1,5 @@
 <?php
 
-// namespace App\Filament\Resources\ConsultationResource\Pages;
-
-// use App\Filament\Resources\ConsultationResource;
-// use Filament\Actions;
-// use Filament\Resources\Pages\ViewRecord;
-
-// class ViewConsultation extends ViewRecord
-// {
-//     protected static string $resource = ConsultationResource::class;
-
-//     protected function getHeaderActions(): array
-//     {
-//         return [
-//             Actions\EditAction::make(),
-//         ];
-//     }
-// }
-// app/Filament/Resources/ConsultationResource/Pages/ViewConsultation.php
-
 namespace App\Filament\Resources\ConsultationResource\Pages;
 
 use App\Filament\Resources\ConsultationResource;
@@ -33,7 +14,8 @@ class ViewConsultation extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            Actions\EditAction::make()
+            ->visible(fn () => auth()->user()?->isAdmin()),
             Actions\DeleteAction::make(),
         ];
     }

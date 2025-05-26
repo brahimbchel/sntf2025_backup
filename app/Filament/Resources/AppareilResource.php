@@ -54,6 +54,10 @@ public static function canViewAny(): bool
                     ->maxLength(100),
             ]);
     }
+    public static function shouldRegisterNavigation(): bool
+{
+    return false;
+}
 
     public static function table(Table $table): Table
     {

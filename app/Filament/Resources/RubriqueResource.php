@@ -30,6 +30,10 @@ public static function getNavigationSort(): ?int
 {
     return 5;
 }
+public static function shouldRegisterNavigation(): bool
+{
+    return false;
+}
 
     // public static function canViewAny(): bool
     // {

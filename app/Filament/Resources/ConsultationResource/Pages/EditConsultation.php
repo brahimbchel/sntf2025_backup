@@ -15,8 +15,12 @@ class EditConsultation extends EditRecord
     {
         return [
             Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
         ];
+    }
+
+    protected function authorizeAccess(): void
+    {
+        abort_unless(auth()->user()?->isAdmin(), 403);
     }
 
      protected function beforeSave(): void

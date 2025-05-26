@@ -31,12 +31,12 @@ public static function getNavigationSort(): ?int
     return 8;
 }
 
-//             public static function canViewAny(): bool
-// {
-//     return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
-// }
+     public static function canViewAny(): bool
+    {
+        return false;
+    }
 
-            public static function canViewAny(): bool
+public static function shouldRegisterNavigation(): bool
 {
     return false;
 }

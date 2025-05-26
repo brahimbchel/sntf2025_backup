@@ -12,16 +12,15 @@ class MedecinConsultationChart extends LineChartWidget
     protected static ?string $heading = 'Mes consultations par mois';
 
     protected static ?int $sort = 3;
-    
-    // public static function canView(): bool
-    // {
-    //     return Auth::check() && Auth::user()->hasRole('medecin');
-    // }
-    
+
+    protected static ?string $maxHeight = '300px'; // facultatif
+
     public static function canView(): bool
-{
-    return auth()->user()?->isMedecin();
-}
+    {
+        return auth()->user()?->isMedecin();
+    }
+
+    protected int | string | array $columnSpan = 1;
 
     protected function getData(): array
     {
@@ -45,7 +44,7 @@ class MedecinConsultationChart extends LineChartWidget
         $dataset = [];
 
         for ($i = 1; $i <= 12; $i++) {
-            $labels[] = Carbon::create()->month($i)->format('M');
+            $labels[] = Carbon::create()->month($i)->translatedFormat('F'); // "Janvier", "Février"...
             $dataset[] = $data[$i] ?? 0;
         }
 
@@ -54,7 +53,10 @@ class MedecinConsultationChart extends LineChartWidget
                 [
                     'label' => 'Mes consultations',
                     'data' => $dataset,
-                    'borderColor' => '#00b894',
+                    'borderColor' => '#3490dc', // ✅ Couleur bleue
+                    'backgroundColor' => 'rgba(52, 144, 220, 0.1)', // ✅ Optionnel pour zone remplie
+                    'fill' => true,
+                    'tension' => 0.4,
                 ],
             ],
             'labels' => $labels,
