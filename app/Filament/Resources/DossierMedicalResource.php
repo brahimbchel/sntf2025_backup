@@ -25,6 +25,11 @@ class DossierMedicalResource extends Resource
     protected static ?string $model = DossierMedical::class;
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
+    public static function canCreate(): bool
+{
+    return false;
+}
+
     public static function getNavigationGroup(): ?string
 {
     return 'Medical Management';
@@ -124,7 +129,8 @@ public static function getNavigationSort(): ?int
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn () => auth()->user()?->isMedecin()),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -144,7 +150,7 @@ public static function getNavigationSort(): ?int
     {
         return [
             'index' => Pages\ListDossierMedicals::route('/'),
-            'create' => Pages\CreateDossierMedical::route('/create'),
+            // 'create' => Pages\CreateDossierMedical::route('/create'),
             'view' => Pages\ViewDossierMedical::route('/{record}'),
             'edit' => Pages\EditDossierMedical::route('/{record}/edit'),
         ];

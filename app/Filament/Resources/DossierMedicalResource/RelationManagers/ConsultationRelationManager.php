@@ -41,128 +41,99 @@ class ConsultationRelationManager extends RelationManager
                 TextInput::make('note')->maxLength(255),
 
 
-Section::make('Résultats')
-    ->schema([
-        // Interrogatoires Section
-        Section::make('Interrogatoires')
-            ->schema([
-                Repeater::make('resultatsInterrogatoires')
-                    ->relationship('resultats') // The base relationship
-                    ->label('')
+                Section::make('Résultats')
                     ->schema([
-                        Select::make('rubrique_id')
-                            ->label('Rubrique')
-                            ->options(
-                                Rubrique::where('type', 'interrogatoire')
-                                    ->with('appareil')
-                                    ->get()
-                                    ->mapWithKeys(fn ($rubrique) => [
-                                        $rubrique->id => $rubrique->appareil 
-                                            ? "{$rubrique->titre} ({$rubrique->appareil->nom})" 
-                                            : $rubrique->titre
+                        // Interrogatoires Section
+                        Section::make('Interrogatoires')
+                            ->schema([
+                                Repeater::make('resultatsInterrogatoires')
+                                    ->relationship('resultats') // The base relationship
+                                    ->label('')
+                                    ->schema([
+                                        Select::make('rubrique_id')
+                                            ->label('Rubrique')
+                                            ->options(
+                                                Rubrique::where('type', 'interrogatoire')
+                                                    ->with('appareil')
+                                                    ->get()
+                                                    ->mapWithKeys(fn ($rubrique) => [
+                                                        $rubrique->id => $rubrique->appareil 
+                                                            ? "{$rubrique->titre} ({$rubrique->appareil->nom})" 
+                                                            : $rubrique->titre
+                                                    ])
+                                            )
+                                            ->searchable()
+                                            ->preload()
+                                            ->required()
+                                            ->live()
+                                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                                $rubrique = Rubrique::find($state);
+                                                $set('appareil_id', $rubrique?->appareil_id);
+                                            }),
+                                        
+                                        // Hidden field to store appareil_id
+                                        Forms\Components\Hidden::make('appareil_id'),
+                                        
+                                        TextInput::make('resultat')
+                                            ->label('Résultat')
+                                            ->required()
+                                            ->maxLength(255),
                                     ])
-                            )
-                            ->searchable()
-                            ->preload()
-                            ->required()
-                            ->live()
-                            ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                $rubrique = Rubrique::find($state);
-                                $set('appareil_id', $rubrique?->appareil_id);
-                            }),
-                        
-                        // Hidden field to store appareil_id
-                        Forms\Components\Hidden::make('appareil_id'),
-                        
-                        TextInput::make('resultat')
-                            ->label('Résultat')
-                            ->required()
-                            ->maxLength(255),
-                    ])
-                    ->columns(2)
-                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
-                        // Ensure type is set for new records
-                        $data['type'] = 'interrogatoire';
-                        return $data;
-                    }),
-            ])
-            ->collapsible(),
+                                    ->columns(2)
+                                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                                        // Ensure type is set for new records
+                                        $data['type'] = 'interrogatoire';
+                                        return $data;
+                                    }),
+                            ])
+                            ->collapsible(),
 
-        // Examens Cliniques Section
-        Section::make('Examens Cliniques')
-            ->schema([
-                Repeater::make('resultatsExamensCliniques')
-                    ->relationship('resultats') // Same base relationship
-                    ->label('')
-                    ->schema([
-                        Select::make('rubrique_id')
-                            ->label('Rubrique')
-                            ->options(
-                                Rubrique::where('type', 'examen_clinique')
-                                    ->with('appareil')
-                                    ->get()
-                                    ->mapWithKeys(fn ($rubrique) => [
-                                        $rubrique->id => $rubrique->appareil 
-                                            ? "{$rubrique->titre} ({$rubrique->appareil->nom})" 
-                                            : $rubrique->titre
+                        // Examens Cliniques Section
+                        Section::make('Examens Cliniques')
+                            ->schema([
+                                Repeater::make('resultatsExamensCliniques')
+                                    ->relationship('resultats') // Same base relationship
+                                    ->label('')
+                                    ->schema([
+                                        Select::make('rubrique_id')
+                                            ->label('Rubrique')
+                                            ->options(
+                                                Rubrique::where('type', 'examen_clinique')
+                                                    ->with('appareil')
+                                                    ->get()
+                                                    ->mapWithKeys(fn ($rubrique) => [
+                                                        $rubrique->id => $rubrique->appareil 
+                                                            ? "{$rubrique->titre} ({$rubrique->appareil->nom})" 
+                                                            : $rubrique->titre
+                                                    ])
+                                            )
+                                            ->searchable()
+                                            ->preload()
+                                            ->required()
+                                            ->live()
+                                            ->columns(2)
+                                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                                $rubrique = Rubrique::find($state);
+                                                $set('appareil_id', $rubrique?->appareil_id);
+                                            }),
+                                        
+                                        // Hidden field to store appareil_id
+                                        Forms\Components\Hidden::make('appareil_id'),
+                                        
+                                        Textarea::make('resultat')
+                                            ->label('Observations')
+                                            ->required()
+                                            ->columnSpanFull(),
                                     ])
-                            )
-                            ->searchable()
-                            ->preload()
-                            ->required()
-                            ->live()
-                            ->columns(2)
-                            ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                $rubrique = Rubrique::find($state);
-                                $set('appareil_id', $rubrique?->appareil_id);
-                            }),
-                        
-                        // Hidden field to store appareil_id
-                        Forms\Components\Hidden::make('appareil_id'),
-                        
-                        Textarea::make('resultat')
-                            ->label('Observations')
-                            ->required()
-                            ->columnSpanFull(),
+                                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                                        // Ensure type is set for new records
+                                        $data['type'] = 'examen_clinique';
+                                        return $data;
+                                    }),
+                            ])
+                            ->collapsible(),
                     ])
-                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
-                        // Ensure type is set for new records
-                        $data['type'] = 'examen_clinique';
-                        return $data;
-                    }),
-            ])
-            ->collapsible(),
-    ])
-    ->collapsible(),
-
-
- // Results Section - Only ONE main section
-            // Section::make('Résultats')
-            //     ->schema([
-            //         // Interrogatoires Sub-section
-            //         Section::make('Interrogatoires')
-            //             ->schema([
-            //                 Repeater::make('resultats')
-            //                     ->relationship('resultats')
-            //                     ->schema([
-            //                         // ... your interrogatoire fields ...
-            //                     ])
-            //                     ->columns(2),
-            //             ])
-            //             ->collapsible(),
-                    
-            //         // Examens Cliniques Sub-section
-            //         Section::make('Examen Clinique')
-            //             ->schema([
-            //                 Repeater::make('examens_cliniques')
-            //                     ->schema([
-            //                         // ... your examen clinique fields ... 
-            //                     ])
-            //                     ->columns(2),
-            //             ])
-            //             ->collapsible(),
-            //     ])
-            //     ->collapsible(),       
+                    ->collapsible(),
 
                 // --- Explorations Fonctionnelles ---
                 Section::make('Explorations Fonctionnelles')->schema([
@@ -240,7 +211,14 @@ Section::make('Résultats')
             ->actions([
                 Tables\Actions\ViewAction::make()->label('Voir')->icon('heroicon-o-eye')->openUrlInNewTab(),
                 Tables\Actions\EditAction::make()
-                    // ->visible(fn ($record) => \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday())
+                    // ->visible(function ($record) {
+                    //     $user = auth()->user();
+                    //     $isToday = \Illuminate\Support\Carbon::parse($record->date_consultation)->isToday();
+                    //     if ($user?->isMedecin() && $record->medecin_id === $user->medecin->id) {
+                    //     return $isToday;
+                    //         }
+                    //     return false;
+                    // })
                     ->tooltip('Éditer uniquement une consultation du jour')
                     ->icon('heroicon-o-pencil'),
             ])
