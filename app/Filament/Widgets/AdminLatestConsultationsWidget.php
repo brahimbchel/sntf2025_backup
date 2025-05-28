@@ -21,16 +21,12 @@ class AdminLatestConsultationsWidget extends BaseWidget
 
     protected function getTableQuery(): Builder
     {
-        $yesterday = Carbon::yesterday();
-        $lastWeekStart = Carbon::now()->subWeek()->startOfWeek(Carbon::SATURDAY);
-        $lastWeekEnd = Carbon::now()->subWeek()->endOfWeek(Carbon::FRIDAY);
+        $startOfLastWeek = Carbon::now()->subWeek()->startOfWeek(Carbon::SATURDAY);
+        $endOfLastWeek = Carbon::now()->subWeek()->endOfWeek(Carbon::FRIDAY);
 
         return Consultation::query()
-            ->where(function ($query) use ($yesterday, $lastWeekStart, $lastWeekEnd) {
-                $query->whereDate('date_consultation', $yesterday)
-                    ->orWhereBetween('date_consultation', [$lastWeekStart, $lastWeekEnd]);
-            })
-            ->latest();
+            ->whereBetween('date_consultation', [$startOfLastWeek, now()])
+            ->orderByDesc('date_consultation'); // Ordonné par date décroissante
     }
 
     protected function getTableColumns(): array

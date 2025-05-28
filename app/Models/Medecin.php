@@ -57,7 +57,7 @@ class Medecin extends Model
 
 	public function specialite()
 	{
-    	return $this->belongsTo(Specialite::class, 'specialite_id', 'id');
+    	return $this->belongsTo(Specialite::class);
 	}
 
 	public function centre_medical()
