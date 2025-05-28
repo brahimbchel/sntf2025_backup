@@ -94,6 +94,12 @@ class Consultation extends Model
         return $this->hasMany(Resultat::class, 'consultation_id');
     }
 
+
+    // public function resultats()
+    // {
+    //     return $this->hasMany(Resultat::class, 'consultation_id','id');
+    // }
+
     public function interrogatoires_resultats()
     {
         return $this->hasMany(Resultat::class, 'consultation_id', 'id')

@@ -21,7 +21,7 @@ class TopMedecins extends BaseWidget
 }
 
 
-    protected static ?int $sort = 10;
+    protected static ?int $sort = 5;
 
     protected function getTableQuery(): Builder
     {

@@ -148,7 +148,7 @@
 
     <!-- Message de santé -->
     <div class="footer">
-        <p>🩺 Prenez soin de votre santé. Consultez votre médecin en cas de doute ou d’effet secondaire.</p>
+        <p>🩺 Prenez soin de votre santé. Contactez votre médecin en cas de doute ou d’effet secondaire.</p>
     </div>
 
 </body>

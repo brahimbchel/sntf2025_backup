@@ -114,12 +114,14 @@ public static function getEloquentQuery(): Builder
             ->columns([
                 Tables\Columns\TextColumn::make('nom')
                     ->sortable()
+                    ->label('Nom')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('prenom')
                     ->sortable()
+                    ->label('Prénom')
                     ->searchable(),
                 Tables\Columns\BadgeColumn::make('gender')
-                ->label('sex')
+                ->label('Sex')
                 ->sortable()
                 ->colors([
                     'info' => 'Homme',
@@ -127,17 +129,20 @@ public static function getEloquentQuery(): Builder
                 ]),
     
                 Tables\Columns\TextColumn::make('tel')
-                    ->label('téléphone')
+                    ->label('Téléphone')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                Tables\Columns\TextColumn::make('user.email')
                     ->sortable()
+                    ->label('Email')
                     ->searchable(),
                 
-                Tables\Columns\TextColumn::make('specialite.nom')->label('specialité')
+                Tables\Columns\TextColumn::make('specialite.nom')
                     ->sortable()
+                    ->label('Spécialité')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('Centre_Medical.nom')->label('CMS')
+                Tables\Columns\TextColumn::make('Centre_Medical.nom')
+                    ->label('CMS')
                     ->sortable()
                     ->searchable(),
             ])

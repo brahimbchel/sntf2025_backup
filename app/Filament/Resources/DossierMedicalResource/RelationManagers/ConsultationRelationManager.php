@@ -39,102 +39,149 @@ class ConsultationRelationManager extends RelationManager
                     ]),
 
                 Textarea::make('note')->maxLength(255)->rows(3),
-
-Section::make('Resultats')->schema([
-    Repeater::make('interrogatoires_resultats')
-        ->relationship('interrogatoires_resultats')
-        ->schema([
-            Select::make('rubrique_id')
-                ->label('Rubrique')
-                ->options(function () {
-                    return Rubrique::with('appareil')
-                        ->where('type', 'interrogatoire')
-                        ->get()
-                        ->mapWithKeys(function ($rubrique) {
-                            $appareilNom = $rubrique->appareil?->nom ?? 'Aucun appareil';
-                            return [
-                                $rubrique->id => "{$rubrique->titre} – {$appareilNom}",
-                            ];
-                        });
-                })
-                ->searchable()
-                ->preload()
-                ->createOptionForm([
-                    TextInput::make('titre')->required()->label('Titre de la rubrique'),
-                    Select::make('App_id')
-                        ->label('Appareil')
-                        ->relationship('appareil', 'nom')
-                        ->searchable()
-                        ->preload()
-                        ->createOptionForm([
-                            TextInput::make('nom')->required()->label('Nom de l’appareil'),
-                        ])
-                        ->createOptionUsing(fn (array $data) => Appareil::create($data)),
-                ])
-                ->createOptionUsing(function (array $data) {
-                    $rubrique = Rubrique::create([
-                        'titre' => $data['titre'],
-                        'App_id' => $data['App_id'] ?? null,
-                        'type' => 'interrogatoire',
-                    ]);
-                    return $rubrique->id;
-                }),
-            TextInput::make('resultat')
-                ->label('Résultat')
-                ->required()
-                ->maxLength(100),
-        ])
-        ->columns(2),
-])->collapsible(),
-
-Section::make('Examens Cliniques')->schema([
-    Repeater::make('examens_cliniques_resultats')
-        ->relationship('examens_cliniques_resultats')
-        ->schema([
-            Select::make('rubrique_id')
-                ->label('Rubrique')
-                ->options(function () {
-                    return Rubrique::with('appareil')
-                        ->where('type', 'examen_clinique')
-                        ->get()
-                        ->mapWithKeys(function ($rubrique) {
-                            $appareilNom = $rubrique->appareil?->nom ?? 'Aucun appareil';
-                            return [
-                                $rubrique->id => "{$rubrique->titre} – {$appareilNom}",
-                            ];
-                        });
-                })
-                ->searchable()
-                ->preload()
-                ->createOptionForm([
-                    TextInput::make('titre')->required()->label('Titre de la rubrique'),
-                    Select::make('App_id')
-                        ->label('Appareil')
-                        ->relationship('appareil', 'nom')
-                        ->searchable()
-                        ->preload()
-                        ->createOptionForm([
-                            TextInput::make('nom')->required()->label('Nom de l’appareil'),
-                        ])
-                        ->createOptionUsing(fn (array $data) => Appareil::create($data)),
-                ])
-                ->createOptionUsing(function (array $data) {
-                    $rubrique = Rubrique::create([
-                        'titre' => $data['titre'],
-                        'App_id' => $data['App_id'] ?? null,
-                        'type' => 'examen_clinique',
-                    ]);
-                    return $rubrique->id;
-                }),
-            TextInput::make('resultat')
-                ->label('Résultat')
-                ->required()
-                ->maxLength(100),
-        ])
-        ->columns(2),
-])->collapsible(),
+                    
 
 
+                Section::make('Interrogatoires')
+    ->schema([
+        Repeater::make('resultatsInterrogatoires')
+            ->relationship('interrogatoires_resultats')
+            ->label('')
+            ->schema([
+                Select::make('rubrique_id')
+                    ->label('Rubrique')
+                    ->options(
+                        Rubrique::where('type', 'interrogatoire')
+                            ->with('appareil')
+                            ->get()
+                            ->mapWithKeys(fn ($rubrique) => [
+                                $rubrique->id => $rubrique->appareil 
+                                    ? "{$rubrique->titre} ({$rubrique->appareil->nom})" 
+                                    : $rubrique->titre
+                            ])
+                    )
+                    ->searchable()
+                    ->preload()
+                    ->required()
+                    ->live()
+                    ->createOptionForm([
+                        TextInput::make('titre')
+                            ->label('Titre de la rubrique')
+                            ->required(),
+                        Select::make('appareil_id')
+                            ->label('Appareil')
+                            ->options(Appareil::all()->pluck('nom', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->createOptionForm([
+                                TextInput::make('nom')
+                                    ->label('Nom de l\'appareil')
+                                    ->required(),
+                            ])
+                            ->createOptionUsing(fn (array $data) => Appareil::create($data)),
+                    ])
+                    ->createOptionUsing(function (array $data) {
+                        // Crée une nouvelle rubrique avec le type 'interrogatoire'
+                        $rubrique = Rubrique::create(array_merge($data, ['type' => 'interrogatoire']));
+                        
+                        // Assurez-vous que `App_id` est défini correctement
+                        if (isset($data['appareil_id'])) {
+                            $rubrique->App_id = $data['appareil_id'];
+                            $rubrique->save();
+                        }
+
+                        return $rubrique;
+                    })
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        $rubrique = Rubrique::find($state);
+                        // $set('appareil_id', $rubrique?->appareil_id);
+                    }),
+
+                // Hidden field to store appareil_id
+                Forms\Components\Hidden::make('appareil_id'),
+
+                TextInput::make('resultat')
+                    ->label('Résultat')
+                    ->required()
+                    ->maxLength(255),
+            ])
+            ->columns(2)
+            ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                $data['type'] = 'interrogatoire';
+                return $data;
+            }),
+    ])
+    ->collapsible(),
+
+                Section::make('Examens Cliniques')
+    ->schema([
+        Repeater::make('resultatsExamensCliniques')
+            ->relationship('examens_cliniques_resultats')
+            ->label('')
+            ->schema([
+                Select::make('rubrique_id')
+                    ->label('Rubrique')
+                    ->options(
+                        Rubrique::where('type', 'examen_clinique')
+                            ->with('appareil')
+                            ->get()
+                            ->mapWithKeys(fn ($rubrique) => [
+                                $rubrique->id => $rubrique->appareil 
+                                    ? "{$rubrique->titre} ({$rubrique->appareil->nom})" 
+                                    : $rubrique->titre
+                            ])
+                    )
+                    ->searchable()
+                    ->preload()
+                    ->required()
+                    ->live()
+                    ->createOptionForm([
+                        TextInput::make('titre')
+                            ->label('Titre de la rubrique')
+                            ->required(),
+                        Select::make('appareil_id')
+                            ->label('Appareil')
+                            ->options(Appareil::all()->pluck('nom', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->createOptionForm([
+                                TextInput::make('nom')
+                                    ->label('Nom de l\'appareil')
+                                    ->required(),
+                            ])
+                            ->createOptionUsing(fn (array $data) => Appareil::create($data)),
+                    ])
+                    ->createOptionUsing(function (array $data) {
+                        // Crée une nouvelle rubrique avec le type 'examen_clinique'
+                        $rubrique = Rubrique::create(array_merge($data, ['type' => 'examen_clinique']));
+                        
+                        // Assurez-vous que `App_id` est défini correctement
+                        if (isset($data['appareil_id'])) {
+                            $rubrique->App_id = $data['appareil_id'];
+                            $rubrique->save();
+                        }
+
+                        return $rubrique;
+                    })
+                    ->afterStateUpdated(function ($state, Forms\Set $set) {
+                        $rubrique = Rubrique::find($state);
+                        // $set('appareil_id', $rubrique?->appareil_id);
+                    }),
+
+                // Hidden field to store appareil_id
+                Forms\Components\Hidden::make('appareil_id'),
+
+                Textarea::make('resultat')
+                    ->label('Resultat')
+                    ->required(),
+            ])
+            ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                $data['type'] = 'examen_clinique';
+                return $data;
+            }),
+    ])
+    ->collapsible(),
+                
 
                 // --- Explorations Fonctionnelles ---
                 Section::make('Explorations Fonctionnelles')->schema([
