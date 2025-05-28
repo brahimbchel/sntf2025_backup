@@ -30,6 +30,7 @@ class ConsultationController extends Controller
     public function show(string $id)
     {
         $consultation = Consultation::find($id);
+        // $consultation = Consultation::with('medecin')->find($id);
 
         if (!$consultation) {
             return response()->json(['message' => 'Consultation not found'], 404);
@@ -71,27 +72,36 @@ class ConsultationController extends Controller
         return response()->json(['message' => 'Deleted successfully'], 200);
     }
 
-    public function historique($dossierId)
-    {
-        $today = Carbon::today();
+    public function historique($dossierId) 
+{
+    $today = Carbon::today();
 
-        $consultations = Consultation::where('dossier_id', $dossierId)
-                                    ->whereDate('date_consultation', '<', $today)
-                                    ->orderBy('date_consultation', 'desc')
-                                    ->get();
+    $consultations = Consultation::with([
+        'medecin.specialite', 
+        'medecin.centre_medical'
+    ])
+    ->where('dossier_id', $dossierId)
+    ->whereDate('date_consultation', '<', $today)
+    ->orderBy('date_consultation', 'desc')
+    ->get();
 
-        return response()->json($consultations, 200);
-    }
+    return response()->json($consultations, 200);
+}
 
-        public function future($dossierId)
-    {
-        $today = Carbon::today();
+    public function future($dossierId)
+{
+    $today = Carbon::today();
 
-        $consultations = Consultation::where('dossier_id', $dossierId)
-                                    ->whereDate('date_consultation', '>=', $today)
-                                    ->orderBy('date_consultation', 'asc')
-                                    ->get();
+    $consultations = Consultation::with([
+        'medecin.specialite', 
+        'medecin.centre_medical'
+    ])
+    ->where('dossier_id', $dossierId)
+    ->whereDate('date_consultation', '>=', $today)
+    ->orderBy('date_consultation', 'asc')
+    ->get();
 
-        return response()->json($consultations, 200);
-    }
+    return response()->json($consultations, 200);
+}
+
 }

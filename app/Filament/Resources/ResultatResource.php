@@ -31,23 +31,10 @@ public static function getNavigationSort(): ?int
     return 8;
 }
 
-            public static function canViewAny(): bool
-{
-    return auth()->user()?->isAdmin() || auth()->user()?->isMedecin();
-}
-
-    // // this is the corect one
-    //  ublic static function canViewAny(): bool
-    // {
-    //     return Auth::user()?->hasAnyRole(['medecin']) ?? false;
-    // }
-
-    // temporary
-    // public static function canViewAny(): bool
-    // {
-    //     return Auth::user()?->hasAnyRole(['admin', 'Super Admin', 'admin-agent', 'medecin']) ?? false;
-    // }
-
+ public static function canViewAny(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {
@@ -59,12 +46,6 @@ public static function getNavigationSort(): ?int
                 Forms\Components\Select::make('rubrique_id')
                     ->relationship('rubrique', 'titre')
                     ->required(),
-                // Forms\Components\TextInput::make('rubrique_id')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('consultation_id')
-                //     ->required()
-                //     ->numeric(),
                 Forms\Components\DatePicker::make('dateR')
                     ->required(),
                 Forms\Components\TextInput::make('resultat')
