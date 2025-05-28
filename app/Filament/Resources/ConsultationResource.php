@@ -101,9 +101,9 @@ public static function canDelete(Model $record): bool
                     // ->disabled(fn ($record) => $record && auth()->user()?->isAdmin())
                     ->options(function () {
                         return Medecin::with('specialite')->get()->mapWithKeys(function ($medecin) {
-                            // $specialite = $medecin->specialite->nom ?? 'Aucune spécialité';
-                            // return [$medecin->id => $medecin->nom . ' ' . $medecin->prenom . ' (' . $specialite . ')'];
-                            return [$medecin->id => $medecin->nom . ' ' . $medecin->prenom ];
+                            $specialite = $medecin->specialite->nom ?? 'Aucune spécialité';
+                            return [$medecin->id => $medecin->nom . ' ' . $medecin->prenom . ' (' . $specialite . ')'];
+                            // return [$medecin->id => $medecin->nom . ' ' . $medecin->prenom ];
                         });
                     })
                     ->searchable()

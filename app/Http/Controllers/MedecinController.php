@@ -27,7 +27,7 @@ class MedecinController extends Controller
             'tel' => 'nullable|string|max:50',
             'email' => 'nullable|email|max:50',
             'cm' => 'required|exists:centre_medical,id',
-            'specialite' => 'required|exists:specialite,id',
+            'specialite_id' => 'required|exists:specialite_id,id',
         ]);
 
         $medecin = Medecin::create($validated);
@@ -61,7 +61,7 @@ class MedecinController extends Controller
             'tel' => 'nullable|string|max:50',
             'email' => 'nullable|email|max:50',
             'cm' => 'sometimes|required|exists:centre_medical,id',
-            'specialite' => 'sometimes|required|exists:specialite,id',
+            'specialite_id' => 'sometimes|required|exists:specialite_id,id',
         ]);
 
         $medecin->update($validated);

@@ -36,7 +36,7 @@ class Medecin extends Model
 
 	protected $casts = [
 		'cm' => 'int',
-		'specialite' => 'int'
+		'specialite_id' => 'int'
 	];
 
 	protected $fillable = [
@@ -46,7 +46,7 @@ class Medecin extends Model
 		'tel',
 		'email',
 		'cm',
-		'specialite',
+		'specialite_id',
 		'user_id'
 	];
 
@@ -57,7 +57,7 @@ class Medecin extends Model
 
 	public function specialite()
 	{
-		return $this->belongsTo(Specialite::class,'specialite');
+		return $this->belongsTo(Specialite::class,'specialite_id');
 	}
 
 	public function centre_medical()
