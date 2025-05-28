@@ -96,11 +96,11 @@ public static function canDelete(Model $record): bool
     ->label('Médecin')
     ->disabled(fn ($record) => $record && auth()->user()?->isAdmin())
     ->options(function () {
-        return Medecin::with('specialite', 'centre_medical')->get()->mapWithKeys(function ($medecin) {
-            $specialite = $medecin->specialite->nom ?? 'Aucune spécialité';
-            $centreMedical = $medecin->centre_medical->nom ?? 'Aucun CMS';
-            return [$medecin->id => "{$medecin->nom} {$medecin->prenom} ({$specialite}, CMS: {$centreMedical})"];
-        });
+    return Medecin::with('specialite', 'centre_medical')->get()->mapWithKeys(function ($medecin) {
+        $specialite = $medecin->specialite->nom ?? 'Spécialité non définie';
+        $centreMedical = $medecin->centre_medical->nom ?? 'Aucun CMS';
+        return [$medecin->id => "{$medecin->nom} {$medecin->prenom} ({$specialite}, CMS: {$centreMedical})"];
+    });
     })
     ->searchable()
     ->preload()
