@@ -135,17 +135,17 @@ public static function getNavigationSort(): ?int
                 Tables\Filters\SelectFilter::make('consultation_date_filter')
                     ->label('Consultation Date')
                     ->options([
-                        'today' => 'Today',
-                        'past' => 'Past',
-                        'future' => 'Future',
+                        'today' => 'Aujourd`hui',
+                        'past' => 'Consultations passées',
+                        'future' => 'Rendez-vous à venir',
                     ])
                     ->query(function (Builder $query, array $data) {
                         return $query->whereHas('consultations', function ($q) use ($data) {
-                            if ($data['value'] === 'Aujourd`hui') {
+                            if ($data['value'] === 'today') {
                                 $q->whereDate('date_consultation', now()->toDateString());
-                            } elseif ($data['value'] === 'Consultations passées') {
+                            } elseif ($data['value'] === 'past') {
                                 $q->whereDate('date_consultation', '<', now()->toDateString());
-                            } elseif ($data['value'] === 'Rendez-vous à venir') {
+                            } elseif ($data['value'] === 'future') {
                                 $q->whereDate('date_consultation', '>', now()->toDateString());
                             }
                         });
