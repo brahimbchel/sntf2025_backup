@@ -44,14 +44,21 @@ public static function getNavigationSort(): ?int
     {
         $user = auth()->user();
 
-        // If the user is admin or medecin, show everything
-        if ($user->isAdmin() || $user->isMedecin()) {
-            return parent::getEloquentQuery();
+        if ($user->isAdmin()) {
+            return parent::getEloquentQuery(); // admins see all
+        }
+
+        if ($user->isMedecin()) {
+            return parent::getEloquentQuery()
+                ->whereHas('consultations', function ($query) use ($user) {
+                    $query->where('medecin_id', $user->medecin->id); 
+                });
         }
 
         // Show only the dossier for the logged-in user's employee ID
         return parent::getEloquentQuery()
             ->where('emp_id', $user->employe->id ?? 0);
+
     }
 
     public static function form(Form $form): Form
