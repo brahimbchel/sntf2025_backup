@@ -201,6 +201,7 @@ public static function canDelete(Model $record): bool
                 ]),
 
             BadgeColumn::make('aptitude')
+                ->visible(fn () => auth()->user()?->isAdmin())
                 ->label('Aptitude')
                 ->colors([
                     'success' => 'apte',
