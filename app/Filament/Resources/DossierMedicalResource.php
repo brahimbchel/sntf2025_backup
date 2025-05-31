@@ -149,7 +149,8 @@ public static function getNavigationSort(): ?int
                                 $q->whereDate('date_consultation', '>', now()->toDateString());
                             }
                         });
-                    }),
+                    })
+                    ->visible(fn () => auth()->user()?->isAdmin() || auth()->user()?->isMedecin()),
             ])
                 ->actions([
             Tables\Actions\ViewAction::make(),
