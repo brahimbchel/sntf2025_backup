@@ -4,6 +4,7 @@ namespace App\Filament\Resources\MedecinResource\Pages;
 
 use App\Filament\Resources\MedecinResource;
 use App\Models\User;
+use App\Notifications\SendLoginInfoNotification;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +26,11 @@ class CreateMedecin extends CreateRecord
             'name' => $data['nom'] . ' ' . $data['prenom'],
             'role' => 'medecin',
         ]);
+
+            $user->notify(new SendLoginInfoNotification(
+                $user->email,
+                $data['user']['password']
+            ));
 
         unset($data['user']);
 
