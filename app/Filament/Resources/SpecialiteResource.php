@@ -19,7 +19,7 @@ class SpecialiteResource extends Resource
 {
     protected static ?string $model = Specialite::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
         public static function getNavigationGroup(): ?string
 {
@@ -63,7 +63,6 @@ public static function getNavigationSort(): ?int
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

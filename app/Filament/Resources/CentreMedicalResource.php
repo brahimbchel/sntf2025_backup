@@ -70,7 +70,6 @@ public static function getNavigationSort(): ?int
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

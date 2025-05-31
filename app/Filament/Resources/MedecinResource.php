@@ -23,7 +23,7 @@ class MedecinResource extends Resource
 {
     protected static ?string $model = Medecin::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
         public static function getNavigationGroup(): ?string
 {
