@@ -14,7 +14,7 @@ class MobileAppCard extends BaseWidget
         return [
             Card::make('Application mobile disponible', 'Notre application mobile est disponible pour simplifier votre expérience.')
                 ->description('Télécharger maintenant')
-                ->url('https://example.com/download')
+                ->url('https://drive.google.com/file/d/1-0znzR4bm8Vqa1r87NiNGPSMgggq4PQg/view?usp=drivesdk')
                 ->color('success'),
         ];
     }

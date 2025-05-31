@@ -45,7 +45,7 @@
             <div class="flex flex-col items-center text-center space-y-1">
                 <span class="text-sm text-primary-600 dark:text-primary-400 font-medium">Date de naissance</span>
                 <div class="w-full border border-primary-500 dark:border-primary-400 text-gray-900 dark:text-white font-semibold rounded-md px-4 py-2">
-                    {{ $employe->date_naissance ? \Carbon\Carbon::parse($employe->date_naissance)->format('d/m/Y') : 'N/A' }}
+                    {{ $employe->datedenaissance ? \Carbon\Carbon::parse($employe->datedenaissance)->format('d/m/Y') : 'N/A' }}
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
             <!-- E-mail (user) -->
             <div class="flex flex-col items-center text-center space-y-1">
                 <span class="text-sm text-primary-600 dark:text-primary-400 font-medium">E-mail</span>
-                <div class="w-full border text-gray-900 dark:text-white font-semibold rounded-md px-4 py-2 break-all">
+                <div class="w-full border border-primary-500 dark:border-primary-400 text-gray-900 dark:text-white font-semibold rounded-md px-4 py-2">
                     {{ $employe->user->email }}
                 </div>
             </div>
