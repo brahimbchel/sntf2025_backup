@@ -58,11 +58,11 @@ public static function getNavigationSort(): ?int
             ->columns([
                 // Tables\Columns\TextColumn::make('consultation_id'),
                 Tables\Columns\TextColumn::make('consultation.dossier_medical.employe.nom')
-                    ->label('Nom'),
+                    ->label('Nom')->searchable(),
                 Tables\Columns\TextColumn::make('consultation.dossier_medical.employe.prenom')
-                    ->label('Prénom'),
+                    ->label('Prénom')->searchable(),
                 Tables\Columns\TextColumn::make('consultation.dossier_medical.employe.matricule')
-                    ->label('Matricule'),
+                    ->label('Matricule')->searchable(),
                 Tables\Columns\TextColumn::make('consultation.date_consultation')->date('d/m/Y')
                     ->label('Date')
             ])
