@@ -310,6 +310,8 @@ public static function canDelete(Model $record): bool
             Tables\Actions\EditAction::make()
                 ->visible(fn () => auth()->user()?->isAdmin()),
             Tables\Actions\DeleteAction::make()
+                ->label('Annuler')
+                ->icon('heroicon-m-x-circle')
                 ->before(function (Consultation $record) {
                     // Get the employee associated with the consultation
                     $employeUser = $record->dossier_medical->employe->user;

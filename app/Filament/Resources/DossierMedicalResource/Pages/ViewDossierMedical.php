@@ -45,7 +45,7 @@ class ViewDossierMedical extends ViewRecord
                     ->schema([
                         TextEntry::make('employe.adresse')->label('Adresse'),
                         TextEntry::make('employe.tel')->label('Téléphone'),
-                        TextEntry::make('employe.email')->label('E-mail'),
+                        TextEntry::make('employe.user.email')->label('E-mail'),
                     ])
                     ->collapsible(),
 
