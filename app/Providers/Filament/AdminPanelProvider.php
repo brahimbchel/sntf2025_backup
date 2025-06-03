@@ -52,7 +52,7 @@ class AdminPanelProvider extends PanelProvider
                 'verified',                // Vérifier que l'email est confirmé
                 'can:access-filament',     // Ajouter un contrôle d'accès spécifique pour Filament
             ])
-            ->brandName('SNTF_MED')
+            ->brandName('e-StaffCare')
             ->colors([
                 'primary' => Color::Amber,
             ])
